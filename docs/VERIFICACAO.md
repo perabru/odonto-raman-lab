@@ -23,3 +23,12 @@ Data: 17/11/2026.
 ## Compilação do ESP32
 
 O workflow GitHub Actions `Validar projeto` foi concluído com sucesso (execução 44192134729), incluindo testes de análise e compilação do sketch. Ele compila o sketch para `esp32:esp32:esp32` com Arduino-ESP32 3.3.2. Consultar o resultado da execução em Actions. A compilação não substitui o teste físico.
+
+## Atualização v2 — 17/11/2026
+
+- 10 testes Node aprovados, incluindo conversão Raman (Stokes/anti-Stokes/Rayleigh), bloqueio, interrupção e duração de 3 s da bancada virtual.
+- Quatro STL detalhados regenerados; todas as arestas têm duas faces e volumes orientados positivos.
+- Navegador: onda com troca de modo e pausa; camadas e visualizador ampliado; seleção de componentes; início bloqueado e ciclo interrompido; presets e etapas de processamento; trilhas com progresso preservado após recarregar.
+- Layout avaliado em desktop e iframe com largura de celular; sem rolagem horizontal na página inicial.
+- PDF com 19 páginas; novas páginas de simulações e trilhas renderizadas e inspecionadas.
+- Inspeção visual 3D realizada com o renderizador Canvas 2D de contingência. Hardware físico, impressão 3D e aquisição Raman real continuam fora desta validação.

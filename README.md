@@ -97,3 +97,29 @@ Settings → Pages → Deploy from a branch → `main` → `/(root)` → Save. O
 | `tests/` | Testes científicos e paridade |
 
 Material organizado para **Prof. Bruno Michel Pera**. Sem vínculo comercial com fornecedores e sem parceria institucional firmada. Veja as referências completas no site e no guia. Código e modelos próprios sob licença MIT; artigos e produtos externos mantêm seus direitos e condições de uso.
+
+## Experiência interativa v2
+
+O percurso principal agora é **Dente 3D → Luz e Raman 3D → Hardware 3D → Software e curvas → Trilhas de estudo**.
+
+- Molar detalhado com seleção de camadas, isolamento, separação gradual, zoom, vistas e rotação opcional.
+- Onda eletromagnética em 3D: Stokes, Rayleigh e anti-Stokes; laser e deslocamento ajustáveis. Tempo, cores e amplitudes são ilustrativos; o comprimento de onda de saída é calculado pela diferença de números de onda.
+- Hardware 3D: bancada LED com dois LEDs, ESP32, protoboard, botão e chave de tampa. Ciclo virtual de 3 s com bloqueio e interrupção. Uma segunda cena explica o caminho óptico de um instrumento Raman profissional.
+- Software guiado em quatro etapas com cenários de ruído, fluorescência e comparação de tecidos sintéticos.
+- Oito etapas de estudo por curso (24 no total), com explicação, atividade, entrega e progresso local. Sem cadastro ou dados pessoais.
+- Guia PDF atualizado com 19 páginas, incluindo as três trilhas.
+
+### Modelos e código das cenas
+
+`viewer.js` renderiza malhas locais via WebGL ou Canvas 2D quando WebGL não está disponível. `scene-geometry.js` constrói as cenas didáticas de onda e hardware. `simulation-state.js` contém a lógica verificável da bancada virtual e a conversão espectral. `experience.js` conecta os controles, sem acessar hardware físico.
+
+Os quatro STL do molar são gerados por `scripts/gerar_molar.py`:
+
+```bash
+python -m pip install numpy scikit-image
+python scripts/gerar_molar.py
+```
+
+O script usa campos geométricos e marching cubes; verifica malhas fechadas e orienta as faces para fora. Unidades: mm, com ampliação didática. Os modelos não foram impressos ou validados clinicamente. `modelos/dente.scad` preserva a versão simplificada anterior para exercícios de CAD; não é a origem das malhas detalhadas da v2. Caixa e bandeja continuam descritas em `modelos/bancada.scad`.
+
+A animação de hardware representa a lógica de estados. Não simula corrente, tolerância, falhas elétricas ou desempenho óptico e não substitui teste físico supervisionado. Os arquivos originais de firmware, dados e análise permanecem disponíveis.

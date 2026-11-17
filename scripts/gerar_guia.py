@@ -16,7 +16,7 @@ from reportlab.lib.enums import TA_LEFT
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'python'))
 from analisar import read_csv,analyze
-jscode="import {references,bom,phases,questions} from './content.js';console.log(JSON.stringify({references,bom,phases,questions}));"
+jscode="import {references,bom,phases,questions} from './content.js';import {tracks} from './trilhas.js';console.log(JSON.stringify({references,bom,phases,questions,tracks}));"
 meta=json.loads(subprocess.check_output(['node','--input-type=module','-e',jscode],cwd=ROOT))
 fonts=Path('/usr/share/fonts/truetype/dejavu')
 for name,file in [('D','DejaVuSans.ttf'),('DB','DejaVuSans-Bold.ttf'),('DI','DejaVuSans-Oblique.ttf'),('Serif','DejaVuSerif.ttf')]:pdfmetrics.registerFont(TTFont(name,str(fonts/file)))
@@ -39,9 +39,9 @@ def title(n,t,desc):
 def h(t):add(t,'HeadingD')
 def bullets(items):
  for i in items:add('• '+i)
-def table(headers,rows,widths):
+def table(headers,rows,widths,padding=10):
  data=[[p(v,'CellD') for v in headers]]+[[p(str(v),'CellD') for v in row] for row in rows]
- t=Table(data,colWidths=widths,repeatRows=1,hAlign='LEFT');t.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),LIGHT),('VALIGN',(0,0),(-1,-1),'TOP'),('LINEBELOW',(0,0),(-1,-1),.5,LINE),('LEFTPADDING',(0,0),(-1,-1),9),('RIGHTPADDING',(0,0),(-1,-1),9),('TOPPADDING',(0,0),(-1,-1),10),('BOTTOMPADDING',(0,0),(-1,-1),10)]));story.append(t);story.append(Spacer(1,12))
+ t=Table(data,colWidths=widths,repeatRows=1,hAlign='LEFT');t.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),LIGHT),('VALIGN',(0,0),(-1,-1),'TOP'),('LINEBELOW',(0,0),(-1,-1),.5,LINE),('LEFTPADDING',(0,0),(-1,-1),9),('RIGHTPADDING',(0,0),(-1,-1),9),('TOPPADDING',(0,0),(-1,-1),padding),('BOTTOMPADDING',(0,0),(-1,-1),padding)]));story.append(t);story.append(Spacer(1,12))
 def link(url,label):return f'<link href="{html.escape(url,quote=True)}" color="#136c58"><u>{html.escape(label)}</u></link>'
 # Plot directly from the distributed synthetic datasets.
 fig,ax=plt.subplots(figsize=(10,4.5));fig.patch.set_facecolor('#f6f8f1');ax.set_facecolor('#f6f8f1')
@@ -50,7 +50,7 @@ for name,c,label in [('esmalte','#136c58','Esmalte sintético'),('dentina','#b78
 for x in [960,1070,1450]:ax.axvline(x,color='#b0bd9e',ls='--',lw=.8);ax.text(x+6,1.05,str(x),color='#65805e',fontsize=9)
 ax.set(xlabel='Deslocamento Raman (cm⁻¹)',ylabel='Intensidade normalizada',xlim=(400,1800),ylim=(-.05,1.18));ax.spines[['top','right']].set_visible(False);ax.grid(axis='y',alpha=.15);ax.legend(frameon=False,fontsize=9,loc='upper right');fig.tight_layout();fig.savefig(ROOT/'assets/espectros_exemplo.png',dpi=170);plt.close(fig)
 # 01
-add('ODONTORAMAN LAB  /  ENSINO MÉDIO TÉCNICO','KickerD');story.append(Spacer(1,25));add('O que a luz revela<br/>sobre os dentes?','TitleD');add('Proposta interdisciplinar de TCC','HeadingD');add('Informática · Eletrônica · Análises Clínicas');story.append(Spacer(1,15));story.append(Image(str(ROOT/'assets/espectros_exemplo.png'),width=495,height=223));add('Curvas matemáticas para ensino. Não são medições de dentes reais.','SmallD');story.append(Spacer(1,24));add('<b>Uma investigação em 16 semanas.</b> Software para explorar espectros, bancada didática com ESP32, modelos 3D editáveis e um fluxo de análise documentado.');add('Organizado para Prof. Bruno Michel Pera<br/>Versão 1.0 · 17 de novembro de 2026','SmallD');add(link('https://perabru.github.io/odonto-raman-lab/','Abrir o site interativo')+'  |  '+link('https://github.com/perabru/odonto-raman-lab','Abrir o repositório'),'SmallD')
+add('ODONTORAMAN LAB  /  ENSINO MÉDIO TÉCNICO','KickerD');story.append(Spacer(1,25));add('O que a luz revela<br/>sobre os dentes?','TitleD');add('Proposta interdisciplinar de TCC','HeadingD');add('Informática · Eletrônica · Análises Clínicas');story.append(Spacer(1,15));story.append(Image(str(ROOT/'assets/espectros_exemplo.png'),width=495,height=223));add('Curvas matemáticas para ensino. Não são medições de dentes reais.','SmallD');story.append(Spacer(1,24));add('<b>Uma investigação em 16 semanas.</b> Software para explorar espectros, bancada didática com ESP32, modelos 3D editáveis e um fluxo de análise documentado.');add('Organizado para Prof. Bruno Michel Pera<br/>Versão 2.0 · 17 de novembro de 2026','SmallD');add(link('https://perabru.github.io/odonto-raman-lab/','Abrir o site interativo')+'  |  '+link('https://github.com/perabru/odonto-raman-lab','Abrir o repositório'),'SmallD')
 # 02
 title(2,'A proposta de pesquisa','Área: instrumentação biomédica educacional, biofotônica e ciência de dados.')
 h('Título sugerido');add('Desenvolvimento de uma plataforma didática para análise de espectros Raman de tecidos dentários e integração com uma bancada eletrônica.')
@@ -144,6 +144,19 @@ title(15,'Referências e continuidade','Fontes primárias, documentação oficia
 for i,(name,typ,url,note) in enumerate(meta['references'],1):
  add(f'<b>[{i}]</b> '+link(url,name), 'SmallD');add(typ+'. '+note,'SmallD')
 add('Consulta: 17/11/2026. Links de materiais aparecem no orçamento e no site. Não há vínculo comercial nem parceria institucional firmada.','SmallD')
+# Complemento da experiência interativa v2.
+title(16,'Quatro simulações conectadas','Abra as seções na ordem: dente, onda, hardware e software.')
+h('1. Dente em 3D');add('Arraste para girar, use os botões de zoom e selecione esmalte, dentina ou polpa. O controle de separação afasta as peças; a opção de isolamento mostra somente uma camada. Modelo idealizado, sem finalidade clínica. Os STL detalhados são gerados por scripts/gerar_molar.py; o SCAD preserva a versão simplificada.')
+h('2. Luz e Raman em 3D');add('Escolha Stokes, Rayleigh ou anti-Stokes. Altere o laser e o deslocamento; observe o comprimento de onda calculado. Reproduza ou pause a onda. A animação é desacelerada, com campos, cores e amplitudes ilustrativos. Não representa intensidade relativa nem probabilidade dos processos.')
+h('3. Hardware em 3D');add('A aba escolar permite iniciar um ciclo de 3 s, abrir a tampa e observar bloqueio ou interrupção. Selecione cada componente para identificar sua função. A aba do instrumento mostra um caminho óptico funcional, sem escala e sem instrução de alinhamento laser. A simulação não substitui testes físicos.')
+h('4. Software e curvas');add('Siga entrada, processamento, métricas e exportação. Os atalhos preparam cenários de sinal limpo, ruído, fluorescência e comparação entre tecidos sintéticos. Preserve o bruto e registre as escolhas. Importar CSV não confirma sua origem ou qualidade.')
+add(link('https://perabru.github.io/odonto-raman-lab/#trilhas','Abrir as trilhas interativas'),'SmallD')
+for index,(key,track) in enumerate(meta['tracks'].items(),17):
+ title(index,track['name']+': sua trilha',track['role'])
+ add('<b>Pré-requisito:</b> '+html.escape(track['prerequisite']),'SmallD')
+ add('<b>Entrega final:</b> '+html.escape(track['result']),'SmallD')
+ table(['Etapa','Estudar e praticar','Entregar'],[[str(i+1)+' · '+row[0],row[1]+'<br/><br/>'+row[3],row[4]] for i,row in enumerate(track['lessons'])],[110,255,130],padding=5)
+ add('No site, cada etapa traz uma explicação, atividade vinculada e checklist individual salvo no navegador. As oito etapas se articulam ao cronograma de 16 semanas.','SmallD')
 def footer(c,doc):
  w,hp=doc.pagesize;c.setFillColor(colors.HexColor('#f7f9f3'));c.rect(0,0,w,hp,fill=1,stroke=0)
  c.setFillColor(GREEN);c.rect(42,hp-32,28,3,fill=1,stroke=0)
