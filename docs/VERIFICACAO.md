@@ -22,4 +22,4 @@ Data: 17/11/2026.
 
 ## Compilação do ESP32
 
-O workflow GitHub Actions `Validar projeto` compila o sketch para `esp32:esp32:esp32` com Arduino-ESP32 3.3.2. Consultar o resultado da execução em Actions. A compilação não substitui o teste físico.
+O workflow GitHub Actions `Validar projeto` foi concluído com sucesso (execução 44192134729), incluindo testes de análise e compilação do sketch. Ele compila o sketch para `esp32:esp32:esp32` com Arduino-ESP32 3.3.2. Consultar o resultado da execução em Actions. A compilação não substitui o teste físico.
