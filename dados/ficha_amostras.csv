@@ -1,0 +1,3 @@
+sample_id,tooth_id,tecido,ponto,replica,origem,laser_nm,potencia_mW,integracao_s,acumulacoes,objetiva,resolucao_cm-1,data_iso,operador_codigo,arquivo,observacoes
+SIM_E1,SIM_T1,esmalte,P1,1,simulacao,,,,,,,,,esmalte_simulado.csv,Exemplo matematico sem medicao
+SIM_D1,SIM_T1,dentina,P2,1,simulacao,,,,,,,,,dentina_simulado.csv,Exemplo matematico sem medicao
