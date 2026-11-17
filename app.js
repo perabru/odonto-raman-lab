@@ -1,8 +1,8 @@
 import {nav,sections,bom,phases,questions,references,slides} from './content.js';
 import {simulate,parseCSV,processSpectrum,csvFor} from './spectra.js';
-import {ModelViewer} from './viewer.js';
+import {ModelViewer} from './viewer.js?v=2.1';
 import {enhanceContent} from './experience-content.js';
-import {initExperience} from './experience.js';
+import {initExperience} from './experience.js?v=2.1';
 enhanceContent(nav,sections);
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const iconPaths={home:'M3 10 12 3l9 7M5 9v11h14V9M9 20v-7h6v7',file:'M6 3h9l4 4v14H6zM14 3v5h5M9 12h7M9 16h7',waves:'M2 8c4-7 5 7 9 0s5 7 11 0M2 15c4-7 5 7 9 0s5 7 11 0',chart:'M4 3v17h17M7 15l4-5 4 3 5-7',cube:'m12 2 9 5v10l-9 5-9-5V7zM3 7l9 5 9-5M12 12v10',chip:'M7 7h10v10H7zM9 1v6M15 1v6M9 17v6M15 17v6M1 9h6M1 15h6M17 9h6M17 15h6',code:'m8 6-6 6 6 6M16 6l6 6-6 6M14 3l-4 18',calendar:'M4 5h16v16H4zM8 2v6M16 2v6M4 10h16M8 14h2M14 14h2',book:'M12 5C9 2 5 2 2 3v17c3-1 7-1 10 2 3-3 7-3 10-2V3c-3-1-7-1-10 2zM12 5v17',link:'m10 8 3-3a4 4 0 0 1 6 6l-3 3M14 16l-3 3a4 4 0 0 1-6-6l3-3M8 16l8-8'};
@@ -10,6 +10,7 @@ const navHTML=nav.map(([id,title,icon])=>`<a href="#${id}" data-route="${id}"><s
 const split=navHTML.indexOf('<a href="#proposta"');
 $('#navigation').innerHTML=navHTML.slice(0,split)+'<details class="nav-more"><summary>Projeto e arquivos</summary>'+navHTML.slice(split)+'</details>';
 $('#main').innerHTML=Object.entries(sections).map(([id,html])=>`<section class="view" id="view-${id}" data-view="${id}" hidden>${html}</section>`).join('');
+$$('a[href]').filter(a=>/\.(stl|pdf)$/.test(a.getAttribute('href'))).forEach(a=>a.href+='?v=2.1');
 let hero,model,modelLoaded=false;
 function ensureModel(){if(!model)model=new ModelViewer($('#main3d'));return model;}
 function route(){let id=location.hash.slice(1);if(!sections[id])id='inicio';$$('.view').forEach(el=>el.hidden=el.dataset.view!==id);$$('#navigation a').forEach(el=>{const active=el.dataset.route===id;el.classList.toggle('active',active);if(active)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current');});const activeLink=$('#navigation a.active');if(activeLink?.closest('details'))activeLink.closest('details').open=true;$('#breadcrumb-current').textContent=nav.find(n=>n[0]===id)[1];document.title=`${nav.find(n=>n[0]===id)[1]} · OdontoRaman Lab`;closeMenu();window.scrollTo(0,0);if(id==='inicio'&&hero)hero.draw();if(id==='laboratorio')updateLab();if(id==='modelos'){if(!modelLoaded){modelLoaded=true;ensureModel();model.load($('#model-select').value).catch(e=>toast(e.message));}else model.draw();} }

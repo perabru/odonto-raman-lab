@@ -1,4 +1,4 @@
-import {ModelViewer} from './viewer.js';
+import {ModelViewer} from './viewer.js?v=2.1';
 import {waveScene,benchScene,opticalScene} from './scene-geometry.js';
 import {BenchSimulation,scatteredWavelength} from './simulation-state.js';
 import {tracks} from './trilhas.js';
