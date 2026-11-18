@@ -1,3 +1,7 @@
+## Atualização 3.4 · Administração e criação da empresa
+
+Quarto curso com oito etapas, plano de negócio editável, custos e ponto de equilíbrio, backup JSON e exportação Markdown. O botão de metas adiciona oito compromissos sem duplicar ou substituir edições existentes. Dados ficam neste navegador. Fontes: Sebrae, REDESIM, Receita Federal e Anvisa, consultadas em 18/11/2026. A atividade prepara a empresa; não registra CNPJ nem torna o protótipo apto ao uso clínico.
+
 ## Atualização 3.3 · emissão laser e leitura óptica
 
 A bancada principal passa a usar módulo laser visível documentado (Classe 2, até 1 mW), OPT101, ADS1115 e ESP32. A fonte de 3,0 V é interrompida fisicamente por tampa e botão manual; firmware/PWA apenas adquirem dados. O projeto eletrônico e óptico ainda exige montagem e verificação física.
@@ -45,7 +49,7 @@ Validação: 39 testes automatizados (incluindo exportação OOXML, Fourier, geo
 
 # OdontoRaman Lab
 
-Proposta de TCC para ensino médio técnico que integra **Informática, Eletrônica e Análises Clínicas** em uma plataforma educacional de FT-Raman e carcinoma espinocelular da mucosa bucal, com base na tese de Furuse (2006).
+Proposta de TCC para ensino médio técnico que integra **Informática, Eletrônica, Análises Clínicas e Administração** em uma plataforma educacional de FT-Raman e carcinoma espinocelular da mucosa bucal, com base na tese de Furuse (2006).
 
 **Site:** https://perabru.github.io/odonto-raman-lab/  
 **Documentação:** [Manual enviado](docs/Manual_Monografia_UNIVAP.pdf) · [Modelo monografia](docs/Modelo_Monografia_UNIVAP.docx) · [Modelo INIC limpo](docs/Modelo_INIC_2025_Limpo.docx)

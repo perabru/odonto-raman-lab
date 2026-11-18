@@ -10,7 +10,7 @@ Materiais: Tese, manual, modelo INIC e acesso ao site.
 
 1. Leiam a pergunta do projeto e o resumo da tese de Furuse. O tecido central é a mucosa bucal e a doença é o carcinoma espinocelular.
 2. A entrega-base passa a ter emissão laser própria, fotodiodo, ADC, leitura USB/PWA e documentação. A fotometria é real; obter bandas Raman é uma segunda etapa com instrumentação espectral completa.
-3. Anotem integrantes e responsabilidades: Eletrônica monta e verifica; Análises Clínicas organiza rastreabilidade e leitura crítica; Informática cuida da aplicação e dos dados.
+3. Anotem integrantes e responsabilidades: Eletrônica monta e verifica; Análises Clínicas organiza rastreabilidade e leitura crítica; Informática cuida da aplicação e dos dados; Administração planeja mercado, finanças e operação da empresa.
 4. No calendário, ajustem as datas das 16 etapas ao prazo da escola e definam o responsável de cada entrega.
 
 Entrega: Escopo escrito, responsáveis e calendário ajustado.
@@ -213,6 +213,110 @@ Entrega: Documentação revisada e pacote de entrega organizado.
 - [Manual](https://perabru.github.io/odonto-raman-lab/docs/Manual_Monografia_UNIVAP.pdf)
 - [Modelo INIC](https://perabru.github.io/odonto-raman-lab/docs/Modelo_INIC_2025_Limpo.docx)
 
+## 14. Definir a empresa e sua oferta
+
+Materiais: Descrição do projeto, caderno ou Writer e plano de negócio desta página.
+
+1. Descreva a dificuldade que professores ou laboratórios de ensino enfrentam.
+2. Escolha quem usa, quem decide e quem paga; podem ser pessoas diferentes.
+3. Defina nome provisório, produto ou serviço, entrega e limites. Registre o que ainda é hipótese.
+
+Entrega: Resumo de uma página: problema, público, oferta, diferencial e limites.
+
+- [Plano de negócio](https://perabru.github.io/odonto-raman-lab/#administracao)
+- [Fonte de apoio](https://meuatendimento.sebrae.com.br/sites/PortalSebrae/artigos/passo-a-passo-para-elaborar-o-plano-de-negocios-de-sua-empresa,d7296a2bd9ded410VgnVCM1000003b74010aRCRD)
+
+## 15. Pesquisar clientes e concorrentes
+
+Materiais: Roteiro de entrevista, planilha de comparação e fontes com data.
+
+1. Prepare cinco perguntas sobre rotina, dificuldades, soluções atuais, orçamento e processo de compra.
+2. Faça entrevistas autorizadas e registre respostas sem dados pessoais no site público.
+3. Compare pelo menos três alternativas por finalidade, suporte, preço consultado e limitações; revise a oferta.
+
+Entrega: Síntese das entrevistas e matriz de concorrentes com fonte e data.
+
+- [Plano de negócio](https://perabru.github.io/odonto-raman-lab/#administracao)
+- [Fonte de apoio](https://meuatendimento.sebrae.com.br/sites/PortalSebrae/artigos/passo-a-passo-para-elaborar-o-plano-de-negocios-de-sua-empresa,d7296a2bd9ded410VgnVCM1000003b74010aRCRD)
+
+## 16. Organizar equipe, parceiros e operação
+
+Materiais: Lista de materiais, quadro de funções e cronograma.
+
+1. Distribua gestão, finanças, compras, comercial e atendimento; defina um responsável por entrega.
+2. Desenhe o fluxo pedido, orçamento, preparação, conferência, entrega e suporte.
+3. Consulte capacidade, manutenção, reposição e condições de parceiros. Diferencie empréstimo de compra.
+
+Entrega: Organograma simples, fluxo operacional e tabela de responsabilidades.
+
+- [Plano de negócio](https://perabru.github.io/odonto-raman-lab/#administracao)
+- [Fonte de apoio](https://meuatendimento.sebrae.com.br/sites/PortalSebrae/artigos/passo-a-passo-para-elaborar-o-plano-de-negocios-de-sua-empresa,d7296a2bd9ded410VgnVCM1000003b74010aRCRD)
+
+## 17. Cotar investimento e capital de giro
+
+Materiais: Lista CSV de materiais, três cotações quando possível e LibreOffice Calc.
+
+1. Atualize quantidades, fornecedores, prazo, frete e valor real na lista de compras.
+2. Separe investimento inicial, gastos por entrega e gastos mensais; documente cada estimativa.
+3. Projete recebimentos e pagamentos por mês e estime uma reserva para cobrir os intervalos de caixa.
+
+Entrega: Orçamento com fontes, fluxo de caixa mensal e necessidade de capital de giro.
+
+- [Plano de negócio](https://perabru.github.io/odonto-raman-lab/#administracao)
+- [Fonte de apoio](https://meuatendimento.sebrae.com.br/sites/PortalSebrae/artigos/passo-a-passo-para-elaborar-o-plano-de-negocios-de-sua-empresa,d7296a2bd9ded410VgnVCM1000003b74010aRCRD)
+
+## 18. Testar preço e viabilidade
+
+Materiais: Cotações, estimativas de demanda e simulador financeiro desta página.
+
+1. Escolha uma unidade comparável: uma oficina, licença mensal ou kit. Não misture períodos.
+2. Preencha preço, custos, deduções e volume mensal com hipóteses justificadas.
+3. Teste menor demanda e maior custo. Compare o ponto de equilíbrio à capacidade e registre a decisão.
+
+Entrega: Cenários conservador, base e otimista com premissas e decisão.
+
+- [Plano de negócio](https://perabru.github.io/odonto-raman-lab/#administracao)
+- [Fonte de apoio](https://meuatendimento.sebrae.com.br/sites/PortalSebrae/artigos/passo-a-passo-para-elaborar-o-plano-de-negocios-de-sua-empresa,d7296a2bd9ded410VgnVCM1000003b74010aRCRD)
+
+## 19. Preparar a formalização
+
+Materiais: Descrição da atividade pretendida, endereço proposto e roteiro REDESIM.
+
+1. Defina o que a empresa realmente fará e leve a descrição à orientação contábil.
+2. Verifique viabilidade de atividade, nome e endereço; depois organize ato constitutivo, registro e inscrições conforme a REDESIM.
+3. Mapeie licenciamento local, obrigações fiscais e responsáveis. Se houver produto para saúde, examine também regularização da empresa e do produto com a Anvisa.
+
+Entrega: Checklist de abertura com órgão, documento, responsável e pendências; sem enviar pedidos reais nesta atividade.
+
+- [Plano de negócio](https://perabru.github.io/odonto-raman-lab/#administracao)
+- [Fonte de apoio](https://www.gov.br/empresas-e-negocios/pt-br/redesim/ajuda/)
+
+## 20. Planejar divulgação e atendimento
+
+Materiais: Descrição da oferta, evidências técnicas, apresentação e planilha de contatos autorizados.
+
+1. Prepare uma página de oferta com público, entrega, preço proposto e condições de suporte.
+2. Escolha canais e registre indicadores: contatos, propostas, conversão, custo de aquisição e satisfação.
+3. Escreva o roteiro de demonstração, atendimento, garantia e devolução para revisão antes de comercializar.
+
+Entrega: Plano de marketing, proposta comercial acadêmica e fluxo de atendimento.
+
+- [Plano de negócio](https://perabru.github.io/odonto-raman-lab/#administracao)
+- [Fonte de apoio](https://meuatendimento.sebrae.com.br/sites/PortalSebrae/artigos/passo-a-passo-para-elaborar-o-plano-de-negocios-de-sua-empresa,d7296a2bd9ded410VgnVCM1000003b74010aRCRD)
+
+## 21. Apresentar a empresa e registrar no TCC
+
+Materiais: Plano exportado, cotações, evidências de pesquisa e modelos do TCC/INIC.
+
+1. Revise problema, público, solução, concorrência, equipe, custos, viabilidade e riscos.
+2. Monte um pitch de cinco minutos com demonstração, modelo de receita e próximos marcos.
+3. Inclua método de pesquisa de mercado e análise de custos na monografia; selecione para o INIC apenas o conteúdo pertinente ao objetivo e ao limite do modelo.
+
+Entrega: Plano de negócio, apresentação e contribuição revisada para monografia e INIC.
+
+- [Plano de negócio](https://perabru.github.io/odonto-raman-lab/#administracao)
+- [Fonte de apoio](https://meuatendimento.sebrae.com.br/sites/PortalSebrae/artigos/passo-a-passo-para-elaborar-o-plano-de-negocios-de-sua-empresa,d7296a2bd9ded410VgnVCM1000003b74010aRCRD)
+
 ## Programas
 
 - **OdontoRaman PWA** — Todas as equipes. Capturar fotometria por USB, guardar escuro/referência/amostra, importar espectros Raman CSV e exportar backups locais. https://perabru.github.io/odonto-raman-lab/#coleta
@@ -226,3 +330,4 @@ Entrega: Documentação revisada e pacote de entrega organizado.
 - **OpenSCAD + PrusaSlicer** — Eletrônica. Preparar suportes mecânicos conforme as medidas reais. Os STL antigos são do exercício LED. https://openscad.org/downloads.html
 - **QuPath** — Análises Clínicas. Anotar imagens histológicas digitais autorizadas e discutir estruturas com o professor. https://qupath.github.io/
 - **Python + NumPy / SciPy / Matplotlib** — Informática. Reproduzir cálculos e ampliar a análise em ambiente separado. https://www.python.org/downloads/
+- **Plano de negócio OdontoRaman** — Administração. Escrever a proposta, simular custos e preço, organizar metas e exportar o plano. https://perabru.github.io/odonto-raman-lab/#administracao

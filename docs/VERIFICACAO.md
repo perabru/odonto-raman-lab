@@ -1,3 +1,9 @@
+## Revisão 3.4 — Administração (18/11/2026)
+
+- 63 testes Node: cálculos financeiros, validação de backup, limite e idempotência das metas, além dos testes anteriores.
+- Navegador: preenchimento do cenário de teste (preço 100, variável 40, deduções 10%, fixo 1000, volume 30) produziu contribuição 50, equilíbrio 20 e resultado 500. Nome de teste preservado após recarregar. Oito metas incluídas preservando compromissos existentes.
+- Projeções acadêmicas; sem constituição de empresa ou solicitação de registro. Fontes oficiais estão no roteiro.
+
 ## Versão 3.3 · 18/11/2026
 
 - 59 testes Node aprovados.

@@ -1,6 +1,7 @@
 // Planning stays on this browser. Export a backup to move it between computers.
 export const PLAN_KEY='odonto-research-plan-v1';
-export const PLAN_OWNERS=['Todos','Informática','Eletrônica','Análises Clínicas'];
+import {BUSINESS_STEPS} from './administracao-data.js';
+export const PLAN_OWNERS=['Todos','Informática','Eletrônica','Análises Clínicas','Administração'];
 const DAY=86400000;
 export function localISO(d=new Date()){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
 export function validDate(s){if(typeof s!=='string'||!/^20\d\d-\d\d-\d\d$/.test(s))return false;const d=new Date(s+'T12:00:00Z');return Number.isFinite(+d)&&d.toISOString().slice(0,10)===s;}
@@ -16,7 +17,7 @@ const STAGES=[
  ['Revisar o conjunto de dados','Todos','Conferir acesso, autorização, origem e qualidade dos dados do laboratório parceiro. Fotometria própria e simulações ficam separadas dos espectros Raman externos.','Decisão de escopo e inventário de dados.'],
  ['Validar o processamento','Informática','Comparar resultados antes e depois da correção de fundo e documentar os parâmetros utilizados.','Casos de teste e comparação de curvas.'],
  ['Conferir bandas e variabilidade','Análises Clínicas','Relacionar as bandas discutidas na tese à composição tecidual; registrar sobreposições e variações entre amostras.','Tabela de interpretação com referências.'],
- ['Integrar as três áreas','Todos','Relacionar registro da bancada, metadados e análise no software.','Demonstração completa e roteiro de uso.'],
+ ['Integrar os quatro cursos','Todos','Relacionar bancada, metadados, análise no software e viabilidade da empresa.','Demonstração completa e roteiro de uso.'],
  ['Registrar os resultados obtidos','Todos','Separar testes de software, resultados da bancada e análises de dados. Identificar cada simulação.','Tabelas, gráficos e observações verificáveis.'],
  ['Revisar a monografia','Todos','Conferir estrutura e apresentação no manual disponibilizado. Revisar citações, figuras e referências.','Versão da monografia para o orientador.'],
  ['Escrever o artigo INIC','Todos','Resumir objetivo, metodologia e resultados realmente obtidos no modelo disponibilizado.','Rascunho do artigo e checklist do modelo.'],
@@ -24,6 +25,12 @@ const STAGES=[
  ['Apresentar e arquivar','Todos','Ensaiar a demonstração e explicar o que foi medido, simulado e ainda não validado.','Apresentação, código, documentos e backup.']
 ];
 export function createPlan(start=localISO()) {return {version:1,start,events:STAGES.map(([title,owner,note,delivery],i)=>({id:'week-'+(i+1),date:addDays(start,i*7+6),title,owner,note,delivery,done:false,kind:'stage',week:i+1}))};}
+export function addAdministrationGoals(plan){
+ const copy=validatePlan(plan),ids=new Set(copy.events.map(e=>e.id));
+ const extra=BUSINESS_STEPS.map((s,i)=>({id:'admin-'+(i+1),kind:'custom',done:false,date:addDays(copy.start,s.week*7-1),owner:'Administração',title:s.title,note:s.steps.join(' '),delivery:s.evidence})).filter(e=>!ids.has(e.id));
+ if(copy.events.length+extra.length>100)throw Error('Não há espaço para as metas: limite de 100 compromissos.');
+ return {plan:validatePlan({...copy,events:[...copy.events,...extra]}),added:extra.length};
+}
 export function upgradeLaserStages(plan){
  const original={4:['Documentar a bancada LED','Revisar pinagem, resistores, alimentação e interrupção do ciclo pela tampa.'],7:['Testar o ciclo da bancada','Verificar início, duração, tampa aberta e interrupção com LEDs.']};let changed=0;
  const copy=validatePlan(plan);copy.events=copy.events.map(e=>{const old=original[e.week];if(e.kind!=='stage'||!old||e.title!==old[0]||e.note!==old[1])return e;const [title,,note,delivery]=STAGES[e.week-1];changed++;return {...e,title,note,delivery,done:false};});return {plan:copy,changed};
@@ -67,6 +74,7 @@ export function initPlanning(){const root=document.querySelector('#planning-app'
  root.addEventListener('change',e=>{if(e.target.matches('[data-plan-done]')){const item=state.events.find(v=>v.id===e.target.dataset.planDone);if(item){item.done=e.target.checked;persist();render();}}});
  $('#planning-filter').onchange=()=>{renderGoals();renderTimeline();};for(const [id,timeline] of [['planning-list-view',false],['planning-timeline-view',true]])$('#'+id).onclick=()=>{$('#planning-timeline').hidden=!timeline;$('#planning-milestones').hidden=timeline;$('#planning-list-view').setAttribute('aria-pressed',!timeline);$('#planning-timeline-view').setAttribute('aria-pressed',timeline);renderTimeline();};$('#planning-print').onclick=()=>window.print();$('#planning-prev').onclick=()=>{month=new Date(month.getFullYear(),month.getMonth()-1,1,12);renderCalendar();};$('#planning-next').onclick=()=>{month=new Date(month.getFullYear(),month.getMonth()+1,1,12);renderCalendar();};$('#planning-today').onclick=()=>{selected=localISO();month=new Date(selected+'T12:00:00');renderCalendar();};
  $('#planning-reschedule').onclick=()=>{const start=$('#planning-start').value;if(!validDate(start)||start>'2099-09-01'){report('Escolha uma data de início válida até setembro de 2099.',true);return;}state.start=start;state.events.forEach(e=>{if(e.kind==='stage')e.date=addDays(start,(e.week-1)*7+6);});selected=start;month=new Date(start+'T12:00:00');persist();render();};
+ document.addEventListener('odonto:admin-goals',()=>{try{const result=addAdministrationGoals(state);state=result.plan;persist();render();$('#planning-filter').value='Administração';renderGoals();renderTimeline();location.hash='plano';if(!storageError)report(result.added?`${result.added} metas de Administração adicionadas. Datas sugeridas a partir do início do projeto; ajuste os compromissos conforme a equipe.`:'As metas de Administração já estão no calendário. As edições existentes foram preservadas.');}catch(e){location.hash='plano';report(e.message,true);}});
  $('#planning-add').onclick=()=>edit();$('#planning-cancel').onclick=()=>{$('#planning-editor').hidden=true;$('#planning-add').focus();};
  $('#planning-form').onsubmit=e=>{e.preventDefault();const date=$('#planning-edit-date').value,title=$('#planning-edit-title').value.trim();if(!validDate(date)||!title){report('Informe título e data válidos.',true);return;}const id=$('#planning-edit-id').value;let item=state.events.find(v=>v.id===id);if(!item){if(state.events.length>=100){report('Limite de 100 metas atingido. Exclua um compromisso adicional antes de criar outro.',true);return;}item={id:'event-'+(globalThis.crypto?.randomUUID?.()||Date.now().toString(36)+'-'+Math.random().toString(36).slice(2)),kind:'custom',done:false};state.events.push(item);}Object.assign(item,{date,title,owner:$('#planning-edit-owner').value,note:$('#planning-edit-note').value,delivery:$('#planning-edit-delivery').value});$('#planning-editor').hidden=true;selected=date;month=new Date(date+'T12:00:00');persist();render();};
  $('#planning-delete').onclick=()=>{const id=$('#planning-edit-id').value;state.events=state.events.filter(e=>e.id!==id||e.kind!=='custom');$('#planning-editor').hidden=true;persist();render();};

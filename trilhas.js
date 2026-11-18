@@ -1,3 +1,4 @@
+import {BUSINESS_STEPS} from './administracao-data.js';
 // Each lesson: title, what to study, short explanation, practice, evidence, internal destination.
 export const tracks={
  informatica:{name:'Informática',role:'Construir o software que transforma o espectro em uma análise reproduzível.',result:'Site + importação CSV + processamento + testes + relatório.',prerequisite:'Lógica de programação, variáveis, vetores e funções.',lessons:[
@@ -22,3 +23,5 @@ export const tracks={
  ['Discutir os resultados','Evidência · incerteza · limites do estudo','Descreva apenas resultados efetivamente obtidos. Diferenças em dados sintéticos mostram o comportamento do modelo matemático. Um piloto exploratório não valida diagnóstico nem autoriza atendimento odontológico.','Escreva um parágrafo de resultado e outro de limitações no editor INIC. Revise com as outras áreas.','Discussão com fontes, limites e conclusão compatível com os dados.','professor']
  ]}
 };
+
+tracks.administracao={name:'Administração',role:'Planejar a empresa, verificar sua viabilidade e coordenar a operação.',result:'Plano de negócio, pesquisa de mercado, orçamento, roteiro de formalização e pitch.',prerequisite:'Porcentagens, planilhas e noções de organização de equipes.',lessons:BUSINESS_STEPS.map(s=>[s.title,s.topics,s.text,s.steps.join(' '),s.evidence,'administracao'])};

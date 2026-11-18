@@ -1,3 +1,4 @@
+import {BUSINESS_STEPS,BUSINESS_LINKS} from './administracao-data.js';
 /* Conteúdo da revisão laser 3.3. Quantidades iniciais por bancada. */
 export const LINKS={
  "arduino": "https://www.arduino.cc/en/software/",
@@ -545,7 +546,7 @@ export const HOW_STEPS=[
   "steps": [
    "Leiam a pergunta do projeto e o resumo da tese de Furuse. O tecido central é a mucosa bucal e a doença é o carcinoma espinocelular.",
    "A entrega-base passa a ter emissão laser própria, fotodiodo, ADC, leitura USB/PWA e documentação. A fotometria é real; obter bandas Raman é uma segunda etapa com instrumentação espectral completa.",
-   "Anotem integrantes e responsabilidades: Eletrônica monta e verifica; Análises Clínicas organiza rastreabilidade e leitura crítica; Informática cuida da aplicação e dos dados.",
+   "Anotem integrantes e responsabilidades: Eletrônica monta e verifica; Análises Clínicas organiza rastreabilidade e leitura crítica; Informática cuida da aplicação e dos dados; Administração planeja mercado, finanças e operação da empresa.",
    "No calendário, ajustem as datas das 16 etapas ao prazo da escola e definam o responsável de cada entrega."
   ],
   "evidence": "Escopo escrito, responsáveis e calendário ajustado.",
@@ -918,3 +919,12 @@ export const HOW_STEPS=[
   ]
  }
 ];
+
+AREA_NAMES.administracao='Administração';
+HOW_STEPS.push(...BUSINESS_STEPS.map((s,i)=>({id:'empresa-'+(i+1),area:'administracao',title:s.title,duration:'Até a semana '+s.week,materials:s.materials,steps:s.steps,evidence:s.evidence,links:[{label:'Plano de negócio',url:'#administracao'},{label:'Fonte de apoio',url:BUSINESS_LINKS[s.link]}]})));
+MATERIALS.push(
+ {id:'admin-computador',area:'administracao',name:'Computador da equipe',qty:1,unit:'unidade',priority:'Conferir acervo',status:'conferir',purpose:'Planilhas, pesquisa, plano de negócio e apresentação. Reutilizar equipamento disponível antes de comprar.',url:'#programas'},
+ {id:'admin-contabilidade',area:'administracao',name:'Orientação contábil para abertura',qty:1,unit:'consulta / orçamento',priority:'Formalização real',status:'consultar',purpose:'Cotar abertura, obrigações mensais e orientação conforme atividade. O plano escolar não exige abrir empresa.',url:BUSINESS_LINKS.redesim},
+ {id:'admin-impressos',area:'administracao',name:'Material de apresentação e pesquisa',qty:1,unit:'conjunto',priority:'Opcional',status:'conferir',purpose:'Roteiro de entrevista, proposta e apresentação. Priorizar formato digital; cotar impressão apenas se necessária.',url:'#administracao'}
+);
+PROGRAMS.push({name:'Plano de negócio OdontoRaman',area:'Administração',need:'Principal',purpose:'Escrever a proposta, simular custos e preço, organizar metas e exportar o plano.',url:'#administracao',action:'Abrir Administração',setup:'Preencha as hipóteses da equipe e salve o backup JSON após cada encontro. Para fluxo de caixa mensal, use Calc; para apresentação, Impress.'});

@@ -1,9 +1,9 @@
 import {initFT} from './ft-lab.js';
-import {ModelViewer} from './viewer.js?v=3.3';
+import {ModelViewer} from './viewer.js?v=3.4';
 import {mucosaScene} from './tissue-scene.js';
-import {initPlanning} from './planning.js?v=3.3';
-import {initWriting} from './writing.js?v=3.3';
-import {initMucosaLab} from './mucosa-lab.js?v=3.3';
+import {initPlanning} from './planning.js?v=3.4';
+import {initWriting} from './writing.js?v=3.4';
+import {initMucosaLab} from './mucosa-lab.js?v=3.4';
 export function initResearch(hero){
  initFT();initPlanning();initWriting();initMucosaLab();
  hero.scene='mucosa';hero.reset();hero.setMeshes(mucosaScene());
