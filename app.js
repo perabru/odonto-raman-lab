@@ -1,25 +1,26 @@
 import {administrationHTML,initAdministration} from './administracao.js';
+import {cecRamanHTML,initCECRaman} from './cec-raman.js';
 import {laserHTML,initLaser} from './laser.js';
 import {addImplementation,initImplementation} from './implementation.js';
 import {collectionHTML,initCollection} from './collection.js';
 import {initPWA} from './pwa.js';
-import {nav,sections,phases,questions,references,slides} from './content.js?v=3.4';
+import {nav,sections,phases,questions,references,slides} from './content.js?v=3.5';
 import {simulate,parseCSV,processSpectrum,csvFor} from './spectra.js';
-import {ModelViewer} from './viewer.js?v=3.4';
-import {enhanceContent} from './experience-content.js?v=3.4';
-import {initExperience} from './experience.js?v=3.4';
-import {focusResearch} from './research-content.js?v=3.4';
-import {initResearch} from './research.js?v=3.4';
+import {ModelViewer} from './viewer.js?v=3.5';
+import {enhanceContent} from './experience-content.js?v=3.5';
+import {initExperience} from './experience.js?v=3.5';
+import {focusResearch} from './research-content.js?v=3.5';
+import {initResearch} from './research.js?v=3.5';
 enhanceContent(nav,sections);
 focusResearch(nav,sections,questions,slides,references);
-addImplementation(nav,sections);sections.coleta=collectionHTML;sections.laser=laserHTML;nav.splice(2,0,['laser','Bancada laser','waves']);sections.administracao=administrationHTML;nav.splice(3,0,['administracao','Administração','book']);
+addImplementation(nav,sections);sections.coleta=collectionHTML;sections.laser=laserHTML;nav.splice(2,0,['laser','Bancada laser','waves']);sections.administracao=administrationHTML;nav.splice(3,0,['administracao','Administração','book']);sections.cec=cecRamanHTML;nav.splice(3,0,['cec','Raman · câncer bucal','chart']);
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const iconPaths={home:'M3 10 12 3l9 7M5 9v11h14V9M9 20v-7h6v7',file:'M6 3h9l4 4v14H6zM14 3v5h5M9 12h7M9 16h7',waves:'M2 8c4-7 5 7 9 0s5 7 11 0M2 15c4-7 5 7 9 0s5 7 11 0',chart:'M4 3v17h17M7 15l4-5 4 3 5-7',cube:'m12 2 9 5v10l-9 5-9-5V7zM3 7l9 5 9-5M12 12v10',chip:'M7 7h10v10H7zM9 1v6M15 1v6M9 17v6M15 17v6M1 9h6M1 15h6M17 9h6M17 15h6',code:'m8 6-6 6 6 6M16 6l6 6-6 6M14 3l-4 18',calendar:'M4 5h16v16H4zM8 2v6M16 2v6M4 10h16M8 14h2M14 14h2',book:'M12 5C9 2 5 2 2 3v17c3-1 7-1 10 2 3-3 7-3 10-2V3c-3-1-7-1-10 2zM12 5v17',link:'m10 8 3-3a4 4 0 0 1 6 6l-3 3M14 16l-3 3a4 4 0 0 1-6-6l3-3M8 16l8-8'};
 const navHTML=nav.map(([id,title,icon])=>`<a href="#${id}" data-route="${id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${iconPaths[icon]}"/></svg><span>${title}</span></a>`).join('');
-const principal=new Set(['inicio','como-fazer','laser','administracao','coleta','mucosa','ftraman','analise','plano','documentacao','inic']);
+const principal=new Set(['inicio','como-fazer','laser','cec','administracao','coleta','mucosa','ftraman','analise','plano','documentacao','inic']);
 const links=navHTML.match(/<a .*?<\/a>/g);$('#navigation').innerHTML=links.filter((_,i)=>principal.has(nav[i][0])).join('')+'<details class="nav-more"><summary>Estudos e arquivos</summary>'+links.filter((_,i)=>!principal.has(nav[i][0])).join('')+'</details>';
 $('#main').innerHTML=Object.entries(sections).map(([id,html])=>`<section class="view" id="view-${id}" data-view="${id}" hidden>${html}</section>`).join('');
-$$('a[href]').filter(a=>/\.(stl|pdf)$/.test(a.getAttribute('href'))).forEach(a=>a.href+='?v=3.4');
+$$('a[href]').filter(a=>/\.(stl|pdf)$/.test(a.getAttribute('href'))).forEach(a=>a.href+='?v=3.5');
 let hero,model,modelLoaded=false;
 function ensureModel(){if(!model)model=new ModelViewer($('#main3d'));return model;}
 function route(){let id=location.hash.slice(1);if(!sections[id])id='inicio';$$('.view').forEach(el=>el.hidden=el.dataset.view!==id);$$('#navigation a').forEach(el=>{const active=el.dataset.route===id;el.classList.toggle('active',active);if(active)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current');});const activeLink=$('#navigation a.active');if(activeLink?.closest('details'))activeLink.closest('details').open=true;$('#breadcrumb-current').textContent=nav.find(n=>n[0]===id)[1];document.title=`${nav.find(n=>n[0]===id)[1]} · OdontoRaman Lab`;closeMenu();window.scrollTo(0,0);if(id==='inicio'&&hero)hero.draw();if(id==='laboratorio')updateLab();if(id==='modelos'){if(!modelLoaded){modelLoaded=true;ensureModel();model.load($('#model-select').value).catch(e=>toast(e.message));}else model.draw();} }
@@ -82,5 +83,5 @@ initExperience({getModel:ensureModel,getHero:()=>hero,toast,runPreset:values=>{ 
 
 initResearch(hero);
 
-initImplementation();initCollection();initLaser();initAdministration();initPWA();
+initImplementation();initCollection();initLaser();initCECRaman();initAdministration();initPWA();
 $('#serial-to-collection').onclick=()=>{if(!serialEvents.length){toast('Conecte a bancada e faça um ensaio primeiro.');return;}document.dispatchEvent(new CustomEvent('odonto:led-session',{detail:serialEvents.slice()}));};
