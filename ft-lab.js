@@ -1,5 +1,5 @@
 import {box,tube,sphere} from './scene-geometry.js';
-import {ModelViewer} from './viewer.js?v=3.2';
+import {ModelViewer} from './viewer.js?v=3.3';
 import {simulateMucosa} from './mucosa-lab.js';
 
 export function fourierDemo(spectrum,laser=1064,samples=2048,maxOPD=.025){

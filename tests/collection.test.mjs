@@ -47,7 +47,7 @@ test('relatório de análise mantém a ligação com a coleta e a origem sintét
 });
 test('orçamento distingue cotação ausente, empréstimo e zero informado',()=>{
  const state=defaultMaterials();assert.equal(materialTotals(state).total,0);assert(materialTotals(state).missing>0);
- state.esp32.price=55;state.usb.price=0;state.multimeter.price=1000;state.led.price=.3;
+ state.esp32.price=55;state.usb.price=0;state.multimeter.price=1000;state.led.price=.3;state.led.qty=2;
  const total=materialTotals(state);assert.equal(total.total,55.6);assert(!materialsCSV(state).includes('NaN'));
  assert.deepEqual(validateMaterials(JSON.parse(JSON.stringify(state))),state);
  assert.throws(()=>validateMaterials({...state,esp32:{qty:-1,price:0,status:'cotar'}}));

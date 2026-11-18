@@ -4,9 +4,9 @@ import {guideMarkdown,materialsCSV,defaultMaterials} from '../implementation.js'
 import {simulateMucosa,mucosaCSV} from '../mucosa-lab.js';
 const version=JSON.parse(fs.readFileSync('package.json','utf8')).version,query=version.split('.').slice(0,2).join('.');
 fs.writeFileSync('docs/Como_Fazer_OdontoRaman.md',guideMarkdown());
-fs.writeFileSync('dados/materiais_modelo.csv',materialsCSV(defaultMaterials()));
+fs.writeFileSync('dados/materiais_modelo.csv',materialsCSV(defaultMaterials()).replaceAll('\r\n','\n'));
 fs.writeFileSync('dados/mucosa_sintetica_A.csv',mucosaCSV(simulateMucosa()));
-const core=['./','index.html','manifest.webmanifest',...fs.readdirSync('.').filter(x=>/\.(js|css)$/.test(x)&&x!=='sw.js').flatMap(x=>[x,x+'?v='+query]),'assets/favicon.svg','assets/icon-192.png','assets/icon-512.png','assets/icon-maskable.png','assets/circuito.svg','assets/arquitetura.svg','dados/mucosa_sintetica_A.csv','dados/ficha_coleta_modelo.csv','docs/Como_Fazer_OdontoRaman.md','docs/Dicionario_Coleta.md'];
+const core=['./','index.html','manifest.webmanifest',...fs.readdirSync('.').filter(x=>/\.(js|css)$/.test(x)&&x!=='sw.js').flatMap(x=>[x,x+'?v='+query]),'assets/favicon.svg','assets/icon-192.png','assets/icon-512.png','assets/icon-maskable.png','assets/circuito.svg','assets/arquitetura.svg','assets/bancada-laser.svg','docs/Projeto_Laser.md','firmware/fotometria/fotometria.ino','dados/mucosa_sintetica_A.csv','dados/ficha_coleta_modelo.csv','docs/Como_Fazer_OdontoRaman.md','docs/Dicionario_Coleta.md'];
 const revision=createHash('sha256').update(core.map(name=>fs.readFileSync(name.split('?')[0]==='./'?'index.html':name.split('?')[0])).map(b=>b.toString('base64')).join('')).digest('hex').slice(0,12);
 const sw=`/* Gerado por scripts/prepare-pwa.mjs. Atualize a versão ao publicar alterações. */
 const CACHE='odonto-app-${version}-${revision}';

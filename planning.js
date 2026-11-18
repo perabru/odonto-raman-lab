@@ -9,11 +9,11 @@ const STAGES=[
  ['Delimitar a pergunta de pesquisa','Todos','Ler Furuse (2006), registrar o estudo ex vivo e delimitar o carcinoma espinocelular da mucosa bucal.','Pergunta, objetivo e limites em uma página.'],
  ['Organizar as evidências','Análises Clínicas','Fichar a tese: amostras, equipamento, bandas, método de classificação e limitações.','Ficha de leitura com páginas e referências.'],
  ['Fechar os requisitos','Informática','Definir importação CSV, processamento, rastreabilidade e formatos de exportação.','Lista de requisitos e critérios de aceitação.'],
- ['Documentar a bancada LED','Eletrônica','Revisar pinagem, resistores, alimentação e interrupção do ciclo pela tampa.','Diagrama, lista de materiais e plano de testes.'],
+ ['Documentar a bancada laser','Eletrônica','Especificar módulo laser, OPT101, ADS1115, gabinete e corte físico da alimentação.','Diagrama, lista de materiais e plano de testes.'],
  ['Definir o protocolo de dados','Análises Clínicas','Combinar com o orientador quais dados podem ser usados e como identificar amostra, aquisição e referência histopatológica.','Dicionário de dados e protocolo aprovado pelo orientador.'],
  ['Implementar entrada de espectros','Informática','Importar CSV e recusar arquivos inválidos sem perder o espectro anterior.','Importador testado e exemplos de arquivos.'],
- ['Testar o ciclo da bancada','Eletrônica','Verificar início, duração, tampa aberta e interrupção com LEDs.','Registro de testes e fotos da montagem, se construída.'],
- ['Revisar o conjunto de dados','Todos','Conferir acesso, autorização, origem e qualidade dos dados do laboratório parceiro. Se indisponíveis, manter o estudo metodológico com dados sintéticos identificados.','Decisão de escopo e inventário de dados.'],
+ ['Verificar a aquisição óptica','Eletrônica','Verificar corte físico, escuro, referência, amostra, estabilidade e saturação com materiais inertes.','Registro de testes e fotos da montagem, se construída.'],
+ ['Revisar o conjunto de dados','Todos','Conferir acesso, autorização, origem e qualidade dos dados do laboratório parceiro. Fotometria própria e simulações ficam separadas dos espectros Raman externos.','Decisão de escopo e inventário de dados.'],
  ['Validar o processamento','Informática','Comparar resultados antes e depois da correção de fundo e documentar os parâmetros utilizados.','Casos de teste e comparação de curvas.'],
  ['Conferir bandas e variabilidade','Análises Clínicas','Relacionar as bandas discutidas na tese à composição tecidual; registrar sobreposições e variações entre amostras.','Tabela de interpretação com referências.'],
  ['Integrar as três áreas','Todos','Relacionar registro da bancada, metadados e análise no software.','Demonstração completa e roteiro de uso.'],
@@ -24,6 +24,10 @@ const STAGES=[
  ['Apresentar e arquivar','Todos','Ensaiar a demonstração e explicar o que foi medido, simulado e ainda não validado.','Apresentação, código, documentos e backup.']
 ];
 export function createPlan(start=localISO()) {return {version:1,start,events:STAGES.map(([title,owner,note,delivery],i)=>({id:'week-'+(i+1),date:addDays(start,i*7+6),title,owner,note,delivery,done:false,kind:'stage',week:i+1}))};}
+export function upgradeLaserStages(plan){
+ const original={4:['Documentar a bancada LED','Revisar pinagem, resistores, alimentação e interrupção do ciclo pela tampa.'],7:['Testar o ciclo da bancada','Verificar início, duração, tampa aberta e interrupção com LEDs.']};let changed=0;
+ const copy=validatePlan(plan);copy.events=copy.events.map(e=>{const old=original[e.week];if(e.kind!=='stage'||!old||e.title!==old[0]||e.note!==old[1])return e;const [title,,note,delivery]=STAGES[e.week-1];changed++;return {...e,title,note,delivery,done:false};});return {plan:copy,changed};
+}
 export function validatePlan(raw){
  if(!raw||typeof raw!=='object'||raw.version!==1||!validDate(raw.start)||!Array.isArray(raw.events)||raw.events.length>100)throw Error('Backup inválido: use o arquivo JSON exportado nesta página.');
  const ids=new Set();const text=(v,n)=>typeof v==='string'&&v.length<=n;
@@ -49,7 +53,7 @@ export const planningHTML=`<div class="page-heading"><span class="eyebrow">ORGAN
 </div>`;
 export function initPlanning(){const root=document.querySelector('#planning-app');if(!root||root.dataset.ready)return;root.dataset.ready='true';const $=s=>root.querySelector(s);let state=createPlan(),selected=localISO(),month=new Date(selected+'T12:00:00'),storageError=false;
  const report=(s,bad=false)=>{$('#planning-message').textContent=s;$('#planning-message').classList.toggle('error',bad);};
- try{const stored=localStorage.getItem(PLAN_KEY);if(stored)state=validatePlan(JSON.parse(stored));}catch{report('Não foi possível carregar o planejamento salvo. Um roteiro novo foi aberto; o arquivo anterior não foi substituído.',true);}
+ try{const stored=localStorage.getItem(PLAN_KEY);if(stored){const update=upgradeLaserStages(JSON.parse(stored));state=update.plan;if(update.changed){try{localStorage.setItem(PLAN_KEY,JSON.stringify(state));report('Etapas padrão de Eletrônica atualizadas para laser; essas metas voltaram a pendentes. Datas e textos personalizados foram preservados.');}catch{report('Roteiro laser carregado; exporte backup para preservar a atualização.',true);}}}}catch{report('Não foi possível carregar o planejamento salvo. Um roteiro novo foi aberto; o arquivo anterior não foi substituído.',true);}
  const persist=()=>{try{localStorage.setItem(PLAN_KEY,JSON.stringify(state));storageError=false;report('Planejamento salvo neste navegador.');}catch{storageError=true;report('O navegador não permitiu salvar. Baixe um backup para preservar suas alterações.',true);}};
  const fmt=(d,opts={day:'2-digit',month:'short',year:'numeric'})=>new Date(d+'T12:00:00').toLocaleDateString('pt-BR',opts);
  const ordered=()=>[...state.events].sort((a,b)=>a.date.localeCompare(b.date)||a.title.localeCompare(b.title,'pt-BR'));

@@ -9,7 +9,7 @@ Use apenas códigos do projeto e arquivos autorizados. O aplicativo é um cadern
 | Réplica | Identificador da repetição, sem contar como novo espécime. | R01 |
 | Equipe | Identificação do grupo; não precisa conter nomes. | Equipe 1 |
 | Data e hora | Momento da sessão na hora local do aparelho. O backup armazena ISO 8601 com referência UTC. | Preencher ao executar |
-| Origem | Ficha de demonstração, espectro sintético, CSV autorizado de laboratório ou eventos LED. | Espectro sintético |
+| Origem | Ficha de demonstração, espectro sintético, CSV autorizado de laboratório, fotometria (medição/exemplo) ou eventos LED. | Espectro sintético |
 | Equipamento | Modelo ou origem técnica informada pelo responsável. | Gerador matemático OdontoRaman |
 | Laser | Comprimento de onda de excitação em nm; desconhecido fica em branco. Não é o eixo Raman. | Em branco no exemplo sintético |
 | Potência | Potência na amostra, em mW, quando o operador informou. Não copiar potência nominal sem registrar a condição. | Em branco se desconhecida |
@@ -31,8 +31,18 @@ Use apenas códigos do projeto e arquivos autorizados. O aplicativo é um cadern
 ## Fluxo entre os cursos
 
 1. Análises Clínicas define os códigos e confere a correspondência entre ficha e arquivo.
-2. Eletrônica testa o circuito e salva os eventos LED do ensaio.
+2. Eletrônica testa o circuito e captura escuro, referência e amostra; guarda as contagens e tensões brutas.
 3. Informática verifica importação, preservação do bruto, análise e recuperação do backup.
 4. O grupo exporta ao fim da sessão e guarda a cópia em local aprovado pela escola.
 
 Instalar a PWA não ativa transmissão Wi-Fi/Bluetooth nem sincronização. O conteúdo principal pode ser usado offline após preparação no próprio aparelho; documentos maiores precisam ser acessados antes. O sistema não foi validado para armazenamento clínico identificável.
+
+## Fotometria laser · revisão 3.3
+
+- Sessão JSON `kind: photometry`, `version: 1`, `source: hardware` ou `demonstration`, `spectrometer: false`. A origem é declarada, não autenticada por hardware.
+- Detector a 3,3 V; ADC ±4,096 V e 0,125 mV/contagem. Laser nominal de 640 a 665 nm no importador; projeto de referência 650–655 nm.
+- Três capturas em ordem: `dark`, `reference`, `sample`, cada uma com data ISO e 20 amostras.
+- Cada amostra preserva sequência, tempo do ESP32, contagens, tensão, tampa e presença elétrica de alimentação do módulo. Não há leitura calibrada de potência óptica.
+- O JSON da sessão e o backup de coleta incluem as 60 leituras. O CSV de leituras contém fase e valores brutos; não é compatível com o importador Raman.
+- A transmissão é recalculada dos brutos ao reabrir. Exemplo sintético mantém sua identificação; não pode ser salvo na categoria de medição sem que a validação rejeite.
+- O campo laser na ficha é o nominal registrado na sessão. Potência fica vazia se desconhecida; integração/acumulações Raman não se aplicam.

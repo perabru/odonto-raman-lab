@@ -2,14 +2,14 @@
 
 Guia de execução · 18/11/2026
 
-Bancada LED e dados de ensino. O ESP32 não mede Raman.
+Emissão laser e leitura óptica próprias. A fotometria mede intensidade; a evolução Raman exige instrumentação espectral. Projeto detalhado: https://perabru.github.io/odonto-raman-lab/docs/Projeto_Laser.md
 
 ## 1. Definir a entrega e dividir as equipes
 
 Materiais: Tese, manual, modelo INIC e acesso ao site.
 
 1. Leiam a pergunta do projeto e o resumo da tese de Furuse. O tecido central é a mucosa bucal e a doença é o carcinoma espinocelular.
-2. Escolham a entrega-base: bancada LED, curvas sintéticas, PWA de registros e documentação. Dados reais entram somente se o parceiro os disponibilizar de forma autorizada.
+2. A entrega-base passa a ter emissão laser própria, fotodiodo, ADC, leitura USB/PWA e documentação. A fotometria é real; obter bandas Raman é uma segunda etapa com instrumentação espectral completa.
 3. Anotem integrantes e responsabilidades: Eletrônica monta e verifica; Análises Clínicas organiza rastreabilidade e leitura crítica; Informática cuida da aplicação e dos dados.
 4. No calendário, ajustem as datas das 16 etapas ao prazo da escola e definam o responsável de cada entrega.
 
@@ -26,7 +26,7 @@ Materiais: Lista por equipe e inventário da escola.
 1. Abra Materiais e filtre Eletrônica. Confira o modelo da placa e o conector USB antes de cotar.
 2. Marque o que a escola já possui; ajuste quantidades e informe o valor unitário da cotação. Registre frete e serviços à parte.
 3. Em Análises Clínicas, priorize etiquetas, recipientes de treino e peças artificiais. Use microscópio e lâminas do acervo se houver aula supervisionada.
-4. Itens do laboratório parceiro precisam de orçamento específico. Não compre laser, reagentes de preparo ou amostras humanas para a bancada escolar.
+4. Cote o módulo laser visível Classe 2 até 1 mW com driver e documentação, OPT101, ADS1115, filtro ND e gabinete. A evolução Raman tem itens separados para especificação com laboratório.
 5. Exporte o CSV de compras e combine quem providenciará cada item. Os links são referências de especificação e cotação, sem reserva de estoque.
 
 Entrega: Lista cotada, itens da escola identificados e responsáveis definidos.
@@ -50,63 +50,61 @@ Entrega: Registro de teste aberto offline no dispositivo que será usado.
 - [Coleta PWA](https://perabru.github.io/odonto-raman-lab/#coleta)
 - [Instalação de PWA](https://web.dev/learn/pwa/installation?hl=pt-BR)
 
-## 4. Montar o circuito LED
+## 4. Montar o detector e o corte físico do laser
 
-Materiais: ESP32, 2 LEDs, 2 resistores 470 Ω, protoboards, fios, botão, fim de curso e multímetro.
+Materiais: ESP32, OPT101, ADS1115, capacitores, resistores, chave de dois polos, botão e multímetro.
 
-1. Desconecte o USB durante a montagem. Identifique GND e os GPIO25, 26, 14 e 27 pelo nome impresso na placa, não pela posição do conector.
-2. Ligue GPIO25 → resistor 470 Ω → anodo do LED de ciclo; catodo → GND. Repita com GPIO26 para o LED de estado.
-3. Ligue COM do fim de curso ao GND e NO ao GPIO14. Deixe NC sem ligação. A tampa fechada deve pressionar a chave.
-4. Ligue o botão entre GPIO27 e GND. Em botão de quatro terminais, confirme os pares internos; os dois lados usados devem se unir apenas ao pressionar.
-5. Confira continuidade e ausência de curto entre alimentação e GND. As entradas trabalham com lógica de 3,3 V; a alimentação da placa vem do USB.
-6. Peça a conferência do professor de Eletrônica antes de alimentar. Guarde foto do circuito e tabela de ligações.
+1. Comece sem o laser conectado. Siga a tabela completa de pinos em Bancada laser; OPT101 e ADS1115 recebem 3,3 V.
+2. Ligue ADS1115 SDA ao GPIO21 e SCL ao GPIO22. O nó dos pinos 4 e 5 do OPT101 vai a A0. Confira GND e pull-ups.
+3. A fonte de 3,0 V do laser passa por chave geral, primeiro contato NO da tampa e botão de emissão, em série. Teste inicialmente usando LED com resistor como carga.
+4. O segundo polo da tampa vai ao GPIO14/GND. Monitore a alimentação após o botão no GPIO34 com resistores de 10 kΩ e 100 kΩ conforme o esquema.
+5. Confira tensões e continuidade com o professor. O corte deve funcionar fisicamente mesmo com ESP32 desligado.
 
-Entrega: Circuito conferido e pinagem registrada.
+Entrega: Pinagem conferida e corte físico ensaiado sem laser.
 
-- [Esquema elétrico](https://perabru.github.io/odonto-raman-lab/assets/circuito.svg)
-- [Montagem e monitor](https://perabru.github.io/odonto-raman-lab/#bancada)
-- [Como usar protoboard](https://www.robocore.net/tutoriais/como-utilizar-uma-protoboard)
+- [Projeto e tabela de pinos](https://perabru.github.io/odonto-raman-lab/docs/Projeto_Laser.md)
+- [Montagem](https://perabru.github.io/odonto-raman-lab/#laser)
+- [OPT101](https://www.ti.com/lit/ds/symlink/opt101.pdf)
+- [ADS1115](https://www.ti.com/lit/ds/symlink/ads1115.pdf)
 
-## 5. Gravar o firmware e testar o ciclo
+## 5. Gravar o firmware de aquisição óptica
 
-Materiais: Arduino IDE, cabo USB de dados e circuito conferido.
+Materiais: Arduino IDE, cabo de dados e aquisição conferida.
 
-1. Baixe bancada.ino e abra-o na Arduino IDE dentro de uma pasta chamada bancada.
-2. Siga a instalação oficial do suporte ESP32. No Gerenciador de Placas instale a versão estável de esp32 by Espressif Systems; escolha a placa clássica compatível e a porta correta.
-3. Compile e envie o código. Se a porta não aparecer, confira cabo, USB e o driver oficial correspondente ao conversor da sua placa.
-4. Abra o monitor serial em 115200 baud. Com a tampa fechada, pressione o botão: o LED de ciclo deve acender por cerca de 3 segundos e depois apagar.
-5. Repita abrindo a tampa durante o ciclo: o LED deve apagar e surgir tampa_aberta. Com tampa aberta, iniciar deve produzir inicio_bloqueado.
-6. Registre data, versão do firmware, resultado esperado, resultado observado e correção quando houver falha. Não avance para a caixa enquanto esses testes falharem.
+1. Baixe fotometria.ino e abra em pasta fotometria. Instale o núcleo ESP32 oficial e selecione a placa correta.
+2. Compile e grave com a alimentação do laser desligada. O código usa Wire; não precisa de biblioteca externa de ADC.
+3. No monitor a 115200 baud confira laser_photometry, contagens, tensão, tampa e alimentação. Não há comando de acionamento do laser.
+4. Confira detecção do ADC e resposta à luz ambiente. Falha I2C exige corrigir o circuito desligado e reiniciar.
+5. Feche o monitor da IDE antes de usar a leitura USB da PWA.
 
-Entrega: Três testes registrados: ciclo normal, interrupção e início bloqueado.
+Entrega: Firmware compilado e tensões/estados conferidos.
 
-- [Baixar firmware](https://perabru.github.io/odonto-raman-lab/firmware/bancada/bancada.ino)
+- [Firmware de leitura](https://perabru.github.io/odonto-raman-lab/firmware/fotometria/fotometria.ino)
 - [Instalar ESP32](https://docs.espressif.com/projects/arduino-esp32/en/latest/installing.html)
-- [Arduino IDE](https://www.arduino.cc/en/software/)
 
-## 6. Ajustar a caixa e documentar a montagem
+## 6. Montar a óptica dentro do gabinete
 
-Materiais: STL/SCAD, fatiador e acesso à impressão 3D.
+Materiais: Módulo documentado, fonte regulada, suportes, material, ND, detector, gabinete e responsável.
 
-1. Baixe a base, tampa e bandeja. No OpenSCAD confira os encaixes com as medidas reais de sua placa e chave.
-2. No PrusaSlicer use o perfil da impressora da escola. Verifique dimensões, orientação, suportes e estimativa de material com o responsável.
-3. Imprima e monte sem forçar a placa. Fixe o fim de curso para que fechar a tampa realmente o pressione; proteja os terminais contra curto.
-4. Repita os três testes do firmware depois da fixação. Fotografe a montagem e anote alterações de dimensões.
-5. A caixa é uma demonstração com LEDs; não constitui proteção ou intertravamento para laser de pesquisa.
+1. Fixe laser, suporte de material, filtro ND e detector na geometria de transmissão, com tudo desligado.
+2. O ND deve ter atenuação próxima de OD 3 na faixa do laser. Confira curva e compatibilidade; não o confunda com filtro Raman.
+3. Use gabinete opaco, anteparos e terminador de feixe. A caixa STL anterior foi desenhada para LED e precisa de novo projeto para esta finalidade.
+4. O responsável verifica potência, contenção, fixações e funcionamento do corte de tampa antes da primeira emissão.
+5. Toda mudança de alinhamento ou troca de material ocorre com emissão desligada. O botão de emissão deve ser mantido pressionado apenas com tampa fechada.
 
-Entrega: Caixa montada, fotos e repetição dos testes.
+Entrega: Montagem óptica revisada e verificação física registrada.
 
-- [Arquivos de impressão](https://perabru.github.io/odonto-raman-lab/#modelos)
-- [Fonte da caixa](https://perabru.github.io/odonto-raman-lab/modelos/bancada.scad)
-- [PrusaSlicer](https://www.prusa3d.com/p/prusaslicer/)
+- [Projeto laser](https://perabru.github.io/odonto-raman-lab/docs/Projeto_Laser.md)
+- [Ficha do módulo](https://www.lasercomponents.com/fileadmin/user_upload/home/Datasheets/diverse-opto-systems/modules/lc-lmd-650-01-laser-module.pdf)
+- [Filtro ND](https://www.thorlabs.de/catalogpages/V21/829.pdf)
 
 ## 7. Preparar a ficha e treinar a rastreabilidade
 
-Materiais: Etiquetas, recipientes vazios e três peças artificiais.
+Materiais: Etiquetas, fichas e três materiais inertes do ensaio.
 
 1. Identifique três peças de demonstração como DEMO-001, DEMO-002 e DEMO-003. Não use nomes, prontuários ou fotografias de pacientes.
 2. Separe código do espécime, ponto e réplica. Exemplo: DEMO-001 / P01 / R01; novas réplicas mantêm o mesmo código de espécime.
-3. Na Coleta PWA registre a equipe, origem, data e observações da atividade. Escolha a origem verdadeira: demonstração, sintético ou CSV do laboratório.
+3. Na Coleta PWA registre equipe, data e origem: fotometria real, exemplo de fotometria ou espectro Raman. Não misture essas categorias.
 4. Peça a outro colega para conferir os códigos da etiqueta e da ficha e registrar se encontrou divergências.
 5. Para dados reais, o laboratório deve fornecer códigos sem identificação pessoal. Uma tabela que permita reidentificar pessoas fica sob guarda institucional, fora deste site público e do GitHub.
 
@@ -133,35 +131,36 @@ Entrega: Fichamento e figura comentada com fonte.
 - [INCA](https://www.gov.br/inca/pt-br/assuntos/cancer/tipos/boca/versao-para-profissionais-de-saude)
 - [Tese](https://perabru.github.io/odonto-raman-lab/docs/Furuse_2006_FT_Raman_Mucosa.pdf)
 
-## 9. Registrar CSV e eventos da bancada na PWA
+## 9. Medir escuro, referência e amostra na PWA
 
-Materiais: PWA preparada, códigos definidos e arquivo ou bancada USB.
+Materiais: Bancada revisada, computador com Web Serial e materiais inertes.
 
-1. Para uma ficha de treino, preencha os campos da Coleta PWA e salve. Para um espectro, selecione a origem e importe um CSV de duas colunas: shift_cm-1 e intensity.
-2. Informe equipamento e condições conhecidas: laser em nm, potência em mW, integração em segundos e acumulações. Deixe desconhecidos em branco; não copie os valores da tese como se fossem os da sua sessão.
-3. Para USB, use Chrome/Edge compatível no computador e feche o monitor da Arduino IDE. Em Montagem e monitor clique Conectar ESP32 e selecione a porta.
-4. Faça um ensaio e clique Enviar eventos para coleta. Complete o código e salve a sessão. A janela guarda os últimos 1.000 eventos; salve ao final de cada ensaio.
-5. No celular, use fichas e importação de arquivos. Esta versão não tem conexão direta ao ESP32 por Wi-Fi/Bluetooth nem sincronização em nuvem.
-6. Baixe o backup ao fim da aula. O JSON guarda registros, CSV bruto e eventos; o CSV de fichas guarda apenas os metadados.
+1. Abra Bancada laser → Medir e salvar → Conectar leitura USB. Conectar não liga o laser.
+2. Com tampa fechada e botão solto, aguarde estabilizar e capture escuro. São preservadas as próximas 20 leituras.
+3. Com o branco ou suporte vazio, mantenha o botão de emissão pressionado, espere estabilizar e capture referência.
+4. Desligue a emissão e a chave geral antes de trocar o material. Feche a tampa, religue, estabilize e capture amostra mantendo o botão pressionado.
+5. Confira média, desvio e transmissão relativa. Se houver sinal insuficiente ou possível saturação, corrija a montagem e refaça as três etapas; não aumente a potência.
+6. Baixe JSON/CSV ou envie à Coleta PWA, complete código/equipe e clique Salvar. No celular, importe a sessão JSON.
 
-Entrega: Registro salvo, origem identificada e backup baixado.
+Entrega: Sessão com 60 leituras brutas e código rastreável.
 
+- [Bancada laser](https://perabru.github.io/odonto-raman-lab/#laser)
 - [Coleta PWA](https://perabru.github.io/odonto-raman-lab/#coleta)
-- [Monitor USB](https://perabru.github.io/odonto-raman-lab/#bancada)
-- [Compatibilidade Web Serial](https://developer.chrome.com/docs/capabilities/serial?hl=pt-br)
+- [Procedimento](https://perabru.github.io/odonto-raman-lab/docs/Projeto_Laser.md)
 
-## 10. Solicitar dados a um laboratório, se fizer parte do escopo
+## 10. Especificar a evolução Raman com um laboratório
 
 Materiais: Resumo do projeto e professor responsável.
 
-1. O professor apresenta o projeto ao laboratório e pergunta sobre disponibilidade, custo, treinamento e possibilidade de receber dados já existentes sem identificação pessoal.
+1. O professor apresenta a intenção de construir aquisição Raman própria. Discutam laser de linha estreita, óptica, filtros, espectrômetro, calibração, gabinete e custos, ou acesso a um instrumento existente.
 2. Solicitem instrumento, excitação, unidade dos eixos, potência na amostra quando conhecida, integração, acumulações, data, códigos de espécime/ponto/réplica e verificações de qualidade.
 3. O responsável institucional define autorizações, material biológico, preparo, transporte, descarte e supervisão. Este guia não orienta biópsia nem coleta clínica por estudantes.
 4. O operador do instrumento executa a aquisição e fornece o arquivo bruto original e uma exportação CSV. Não presumam que parâmetros de outro equipamento reproduzem a tese.
-5. Confiram origem, critérios de inclusão e limitações antes de usar os dados. Se não houver parceria, concluam a avaliação didática com dados sintéticos claramente identificados.
+5. Sem a instrumentação espectral, a equipe conclui a fotometria real e os testes computacionais, relatando que não mediu bandas Raman nem material humano.
 
 Entrega: Condições acordadas pelo professor ou escopo mantido como didático.
 
+- [Evolução para Raman](https://perabru.github.io/odonto-raman-lab/#laser)
 - [Laboratório Univap — consultar](https://www.univap.br/univap/pesquisa/iped/laboratorios-ip-d/laboratorio-de-nanossensores)
 - [Método da tese](https://perabru.github.io/odonto-raman-lab/#proposta)
 - [Referência INCA](https://www.gov.br/inca/pt-br/assuntos/cancer/tipos/boca/versao-para-profissionais-de-saude)
@@ -170,7 +169,7 @@ Entrega: Condições acordadas pelo professor ou escopo mantido como didático.
 
 Materiais: CSV bruto e ficha da sessão.
 
-1. Abra uma coleta com espectro e use Analisar curva. Confira a origem, o intervalo do eixo e o número de pontos; não trate eventos LED como espectro.
+1. Para fotometria, examine escuro, referência, amostra, dispersão e transmissão relativa em Bancada laser. Para espectro Raman, use Analisar curva na coleta correspondente; volts no tempo não são deslocamento Raman.
 2. Compare a curva bruta com a processada. Comece sem suavização e sem normalização; altere uma opção por vez e registre o efeito.
 3. Para estudar a opção de 1450 cm⁻¹, confira se a janela está coberta e há sinal positivo. A rotina didática usa o máximo entre 1420 e 1480; isso não reproduz automaticamente todo o método da tese.
 4. Exporte o bruto preservado, o processado e o relatório dos parâmetros. Avalie problemas de fundo, saturação, origem e resolução com o responsável pelos dados.
@@ -188,7 +187,7 @@ Materiais: Computador, celular escolhido e uma sessão de teste.
 1. Crie uma ficha DEMO, importe o exemplo sintético, salve e recarregue. Confira se códigos, metadados e curva permanecem.
 2. Exporte o backup JSON e importe-o em outro navegador de teste. Registros com o mesmo ID não são sobrescritos silenciosamente; confira os conflitos informados.
 3. Teste um CSV inválido: o aplicativo deve recusar e preservar a entrada anterior. Teste também ficar offline após a preparação.
-4. Confira a montagem física com os três ensaios do firmware e registre o modelo do computador/celular e navegador usados.
+4. Confira fisicamente corte da tampa, botão, estabilidade, repetibilidade e resposta a filtros. Teste desconexão USB e erro de ADC; registre o hardware utilizado.
 5. Para desenvolvimento, rode npm test. Aprovação de teste automático não substitui o ensaio do hardware ou a verificação no celular da equipe.
 
 Entrega: Planilha de testes com resultado observado e limitações.
@@ -216,14 +215,14 @@ Entrega: Documentação revisada e pacote de entrega organizado.
 
 ## Programas
 
-- **OdontoRaman PWA** — Todas as equipes. Registrar fichas, anexar CSV, guardar eventos LED, trabalhar offline após preparar o aparelho e exportar backup. https://perabru.github.io/odonto-raman-lab/#coleta
+- **OdontoRaman PWA** — Todas as equipes. Capturar fotometria por USB, guardar escuro/referência/amostra, importar espectros Raman CSV e exportar backups locais. https://perabru.github.io/odonto-raman-lab/#coleta
 - **Chrome / navegador compatível** — Todas as equipes. Acessar a plataforma. Chrome no computador oferece Web Serial para a bancada USB; CSV e fichas são o caminho comum no celular. https://www.google.com/chrome/
-- **Arduino IDE 2** — Eletrônica. Compilar e gravar bancada.ino no ESP32 e conferir o monitor a 115200 baud. https://www.arduino.cc/en/software/
+- **Arduino IDE 2** — Eletrônica. Compilar fotometria.ino, gravar o ESP32 e conferir leituras a 115200 baud. O novo firmware usa apenas Wire, incluída no núcleo ESP32. https://www.arduino.cc/en/software/
 - **Visual Studio Code** — Informática. Editar HTML, CSS, JavaScript, firmware e documentação do projeto. https://code.visualstudio.com/download
 - **Git + GitHub** — Informática. Versionar código e publicar o site no GitHub Pages. https://git-scm.com/downloads/
 - **Node.js LTS** — Informática. Executar servidor local e testes JavaScript. https://nodejs.org/en/download
 - **LibreOffice Writer + Calc** — Todas as equipes. Revisar os DOCX, conferir planilhas de compras e abrir exportações CSV. https://www.libreoffice.org/download/
 - **Zotero** — Análises Clínicas / escrita. Organizar a tese e as fontes, anotações e referências. https://www.zotero.org/download/
-- **OpenSCAD + PrusaSlicer** — Eletrônica. Ajustar a caixa e preparar os STL para a impressora disponível na escola. https://openscad.org/downloads.html
+- **OpenSCAD + PrusaSlicer** — Eletrônica. Preparar suportes mecânicos conforme as medidas reais. Os STL antigos são do exercício LED. https://openscad.org/downloads.html
 - **QuPath** — Análises Clínicas. Anotar imagens histológicas digitais autorizadas e discutir estruturas com o professor. https://qupath.github.io/
 - **Python + NumPy / SciPy / Matplotlib** — Informática. Reproduzir cálculos e ampliar a análise em ambiente separado. https://www.python.org/downloads/

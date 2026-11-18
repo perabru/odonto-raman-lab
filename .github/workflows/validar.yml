@@ -32,4 +32,6 @@ jobs:
           arduino-cli core update-index
           arduino-cli core install esp32:esp32@3.3.2
       - name: Compilar firmware para ESP32 clássico
-        run: arduino-cli compile --fqbn esp32:esp32:esp32 firmware/bancada
+        run: |
+          arduino-cli compile --fqbn esp32:esp32:esp32 firmware/bancada
+          arduino-cli compile --fqbn esp32:esp32:esp32 firmware/fotometria

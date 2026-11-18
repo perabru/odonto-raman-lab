@@ -1,5 +1,6 @@
+import {photometryPayload} from './photometry-model.js';
 import {parseCSV} from './spectra.js';
-export const ORIGINS={demonstracao:'Ficha de demonstração',sintetico:'Espectro sintético',laboratorio:'CSV de laboratório autorizado',bancada_led:'Eventos da bancada LED'};
+export const ORIGINS={demonstracao:'Ficha de demonstração',sintetico:'Espectro sintético',laboratorio:'CSV de laboratório autorizado',bancada_led:'Eventos LED · exercício anterior',fotometria:'Fotometria laser · medição',fotometria_demo:'Fotometria · exemplo sintético'};
 export const MAX_RECORDS=300;
 export const MAX_BACKUP_BYTES=24000000;
 const fail=message=>{throw Error(message);};
@@ -15,9 +16,12 @@ export function validateRecord(r){
  if(!Object.hasOwn(ORIGINS,r.origin))fail('Selecione uma origem válida.');
  if(r.payload?.kind==='spectrum')result.payload=spectrumPayload(r.payload.rawCSV,r.payload.filename);
  else if(r.payload?.kind==='led')result.payload=ledPayload(r.payload.events);
+ else if(r.payload?.kind==='photometry')result.payload=photometryPayload(r.payload);
  else if(r.payload!==null)fail('Arquivo da coleta inválido.');
  if(['sintetico','laboratorio'].includes(r.origin)&&result.payload?.kind!=='spectrum')fail('Esta origem exige um espectro CSV.');
  if(r.origin==='bancada_led'&&result.payload?.kind!=='led')fail('Importe ou envie os eventos do monitor USB.');
+ if(['fotometria','fotometria_demo'].includes(r.origin)){if(result.payload?.kind!=='photometry')fail('Importe uma sessão completa de fotometria.');if((r.origin==='fotometria')!==(result.payload.source==='hardware'))fail('A origem deve preservar a identificação de medição ou demonstração.');if(r.laserNm!==result.payload.wavelengthNominalNm)fail('O laser nominal deve corresponder à sessão de fotometria.');if(r.integrationSeconds!==null||r.accumulations!==null)fail('Fotometria usa leituras contínuas, sem acumulações Raman.');if(r.powerMw!==null&&r.powerMw>1)fail('Esta bancada foi especificada para módulo de até 1 mW.');}
+ if(r.payload?.kind==='photometry'&&!['fotometria','fotometria_demo'].includes(r.origin))fail('Selecione uma origem de fotometria.');
  if(r.origin==='demonstracao'&&result.payload!==null)fail('Para anexar um espectro ou eventos, escolha a origem correspondente.');
  if(r.origin==='bancada_led'&&[r.laserNm,r.powerMw,r.integrationSeconds,r.accumulations].some(x=>x!==null))fail('Eventos LED não possuem parâmetros de aquisição Raman.');
  return result;
@@ -25,4 +29,4 @@ export function validateRecord(r){
 export function validateCollectionBackup(v){if(!v||v.format!=='odonto-collection'||v.version!==1||!Array.isArray(v.records)||v.records.length>MAX_RECORDS)fail('Backup de coleta incompatível (máximo de 300 registros).');const records=v.records.map(validateRecord);if(new Set(records.map(r=>r.id)).size!==records.length)fail('Backup com IDs duplicados.');return records;}
 export function mergeCollection(current,incoming){const ids=new Map(current.map(r=>[r.id,r]));let duplicates=0,conflicts=0,added=0;for(const r of incoming){if(ids.has(r.id)){if(JSON.stringify(ids.get(r.id))===JSON.stringify(r))duplicates++;else conflicts++;}else{ids.set(r.id,r);added++;}}if(ids.size>MAX_RECORDS)fail('Limite de 300 registros. Exporte o backup para preservar o lote.');const records=[...ids.values()];if(new TextEncoder().encode(JSON.stringify(records,null,2)).length>MAX_BACKUP_BYTES)fail('Limite local de 24 MB atingido. Exporte o backup para preservar o lote.');return {records,added,duplicates,conflicts};}
 const cell=value=>{const s=String(value??'');return '"'+(/^[=+\-@\t\r]/.test(s)?"'"+s:s).replaceAll('"','""')+'"';};
-export function recordsCSV(records){const headers=['id','data_hora_iso','especime','ponto','replica','equipe','origem','equipamento','laser_nm','potencia_mw','integracao_s','acumulacoes','arquivo','pontos_espectro','eventos_led','observacoes'];return '\uFEFF'+[headers,...records.map(r=>[r.id,r.measuredAt,r.sampleCode,r.point,r.replicate,r.team,ORIGINS[r.origin],r.instrument,r.laserNm,r.powerMw,r.integrationSeconds,r.accumulations,r.payload?.filename||'',r.payload?.points??'',r.payload?.events?.length??'',r.notes])].map(row=>row.map(cell).join(';')).join('\r\n');}
+export function recordsCSV(records){const headers=['id','data_hora_iso','especime','ponto','replica','equipe','origem','equipamento','laser_nm','potencia_mw','integracao_s','acumulacoes','arquivo','pontos_espectro','eventos_led','leituras_opticas','observacoes'];return '\uFEFF'+[headers,...records.map(r=>[r.id,r.measuredAt,r.sampleCode,r.point,r.replicate,r.team,ORIGINS[r.origin],r.instrument,r.laserNm,r.powerMw,r.integrationSeconds,r.accumulations,r.payload?.filename||'',r.payload?.points??'',r.payload?.events?.length??'',r.payload?.kind==='photometry'?60:'',r.notes])].map(row=>row.map(cell).join(';')).join('\r\n');}

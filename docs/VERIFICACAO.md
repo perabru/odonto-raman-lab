@@ -1,3 +1,13 @@
+## Versão 3.3 · 18/11/2026
+
+- 59 testes Node aprovados.
+- Fotometria: validação de protocolo/escala, sequência e estados; razão conhecida recuperada; referência insuficiente, sinal não positivo e possível saturação sem resultado inventado; valores acima de 100% sinalizados, sem truncamento.
+- Sessões têm 60 leituras brutas e origem identificada. Backup/restauração e incompatibilidade com espectro Raman cobertos por testes.
+- Navegador de prévia: atualização 3.2 → 3.3 preservou registros anteriores. Exemplo óptico salvo, recuperado após recarregar e reaberto com razão de 60%. Exportação e reimportação JSON conferidas.
+- Conferência de 23 rotas e arquivos locais: nenhum destino ausente. Guia com 13 etapas e lista com 36 itens.
+- O workflow compila separadamente os firmwares LED e de fotometria para ESP32 clássico.
+- Limites: hardware físico, potência, contenção, repetibilidade e aquisição USB com ESP32 real não ensaiados. A leitura de presença de alimentação não mede emissão óptica. Não há calibração radiométrica ou diagnóstico. A evolução Raman exige instrumento espectral completo e verificação institucional.
+
 ## Versão 3.2 · 18/11/2026
 
 - 50 testes Node e 3 testes Python aprovados; 22 rotas e seus arquivos locais conferidos sem destino ausente.

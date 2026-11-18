@@ -1,3 +1,16 @@
+## Atualização 3.3 · emissão laser e leitura óptica
+
+A bancada principal passa a usar módulo laser visível documentado (Classe 2, até 1 mW), OPT101, ADS1115 e ESP32. A fonte de 3,0 V é interrompida fisicamente por tampa e botão manual; firmware/PWA apenas adquirem dados. O projeto eletrônico e óptico ainda exige montagem e verificação física.
+
+- **Bancada laser:** esquema, pinagem, firmware próprio, fonte técnica e evolução para instrumentação Raman.
+- **Aquisição:** USB a 115200 baud, 20 leituras/s; capturas de escuro, referência e amostra, com 20 leituras preservadas por etapa.
+- **Análise:** médias, desvio e transmissão relativa; bloqueios para referência insuficiente, sinal não positivo, possível saturação e estados incompatíveis. Não há conversão dessas medidas em espectro Raman ou diagnóstico.
+- **PWA:** sessões JSON/CSV, envio à coleta local, backup e reabertura com origem identificada. O exemplo da interface é sintético e não se mistura com medições.
+- **Materiais:** 36 itens, incluindo laser/detector/ADC/contenção e uma lista de evolução Raman a especificar com laboratório. Guia, cronograma padrão e trilhas revisados.
+- **Arquivos:** `docs/Projeto_Laser.md`, `firmware/fotometria/fotometria.ino`, `photometry-model.js` e `laser.js`.
+
+A fotometria mede luz em uma faixa de cor. Obter bandas Raman requer fonte espectroscópica, filtros e espectrômetro compatíveis; a tese usou FT-Raman em 1064 nm. A revisão não reproduz esse instrumento. O firmware LED anterior e sua simulação permanecem identificados como apoio.
+
 ## Atualização 3.2 · execução e coleta PWA
 
 - **Como fazer:** 13 etapas com materiais, instruções, evidências, links e filtro por equipe. Guia completo em Markdown e impressão pelo navegador.
