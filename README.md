@@ -1,11 +1,20 @@
 # OdontoRaman Lab
 
-Proposta de TCC para ensino médio técnico que integra **Informática, Eletrônica e Análises Clínicas** em uma plataforma educacional de espectroscopia Raman de tecidos dentários.
+Proposta de TCC para ensino médio técnico que integra **Informática, Eletrônica e Análises Clínicas** em uma plataforma educacional de FT-Raman e carcinoma espinocelular da mucosa bucal, com base na tese de Furuse (2006).
 
 **Site:** https://perabru.github.io/odonto-raman-lab/  
-**Guia:** [PDF de 15 páginas](docs/Guia_OdontoRaman.pdf)
+**Documentação:** [Manual enviado](docs/Manual_Monografia_UNIVAP.pdf) · [Modelo monografia](docs/Modelo_Monografia_UNIVAP.docx) · [Modelo INIC limpo](docs/Modelo_INIC_2025_Limpo.docx)
 
-## O que está incluído
+## Versão 3 — mucosa, planejamento e escrita
+
+- Mucosa 3D com epitélio, limite basal, conjuntivo, vasos e núcleos ampliados.
+- Cenários matemáticos A/B de 800–1800 cm⁻¹; importação CSV; normalização opcional na janela de 1450 cm⁻¹. Não são dados da tese ou classes clínicas.
+- Calendário com 16 etapas editáveis, metas, responsáveis, exportação ICS e backup JSON. Datas sugeridas; nenhum prazo oficial INIC foi inventado.
+- Editores separados de monografia e INIC: autosave local, prévia, impressão, HTML/Markdown e backup JSON. Sem contas ou sincronização.
+- Manual recebido integralmente e modelos DOCX limpos. Modelo INIC baseado em 2025; chamada vigente deve ser confirmada.
+- Conteúdo dental anterior permanece explicitamente complementar; Guia_OdontoRaman.pdf é o guia legado dessa versão.
+
+## Recursos complementares
 
 - Proposta com pergunta, objetivos, limites, divisão de tarefas, plano de 16 semanas e rubrica.
 - Fundamentos Raman e referências científicas consultadas em 17/11/2026.
@@ -13,14 +22,14 @@ Proposta de TCC para ensino médio técnico que integra **Informática, Eletrôn
 - Modelos 3D interativos e arquivos STL / OpenSCAD originais: molar, camadas, base, tampa e bandeja.
 - Circuito de bancada LED, firmware ESP32 e monitor Web Serial opcional.
 - Lista de materiais com links de produtos, orçamento editável e exportação CSV.
-- Script Python com as mesmas definições analíticas do site.
-- Modo apresentação com oito telas, atividade com correção e guia PDF.
+- Script Python legado para o complemento dental; a análise principal de mucosa está em mucosa-lab.js.
+- Modo apresentação com seis telas, atividade com correção e editores de escrita.
 
 ## Delimitação científica
 
 Este é um projeto **educacional**. O ESP32 controla LEDs e registra estados; **não mede Raman**. Os CSV fornecidos são **simulados**, não são dados de pacientes e não validam diagnóstico. Para obter espectros reais, é necessário um instrumento Raman profissional e um laboratório parceiro. Nenhuma parceria está confirmada.
 
-A versão principal é a avaliação didática e computacional. Uma extensão com material humano depende do fluxo ético e técnico institucional. Não realizar medições na boca nem recolher dentes de estudantes. A caixa e o circuito não são controles de segurança para laser.
+A versão principal é a avaliação didática e computacional. Uma extensão com material humano depende do fluxo ético e técnico institucional. Não realizar medições ou coleta de tecido em estudantes. A caixa e o circuito não são controles de segurança para laser.
 
 ## Executar localmente
 

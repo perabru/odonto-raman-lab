@@ -32,3 +32,12 @@ O workflow GitHub Actions `Validar projeto` foi concluído com sucesso (execuç�
 - Layout avaliado em desktop e iframe com largura de celular; sem rolagem horizontal na página inicial.
 - PDF com 19 páginas; novas páginas de simulações e trilhas renderizadas e inspecionadas.
 - Inspeção visual 3D realizada com o renderizador Canvas 2D de contingência. Hardware físico, impressão 3D e aquisição Raman real continuam fora desta validação.
+
+
+## Versão 3 — 18/11/2026
+
+Foco migrado para CEC da mucosa bucal conforme Furuse2006. Simulações sintéticas A/B, sem classes clínicas ou dados extraídos de figuras. Manual recebido copiado com hash idêntico. Modelos DOCX renderizados e todas as páginas revisadas (1 INIC, 13 monografia).
+
+Verificações: testes de espectros, estados da bancada, importação validada, planejamento/datas/ICS e rascunhos/escape HTML; navegação desktop, mucosa normal/alterada esquemática, ondas1064nm, ciclo/interrupção LED, calendário, salvamento do INIC após reload e prévia. Teste responsivo em iframe390px, não dispositivo físico. Rendering de fallback Canvas2D disponível no navegador de QA; o funcionamento GPU WebGL não foi validado em aparelho físico.
+
+Rascunhos/calendário armazenados localmente, sem colaboração em servidor. HTML/PDF do editor são rascunhos: paginação final e regras da edição INIC requerem revisão no modelo. O calendário não afirma datas oficiais. A tese não fornece CSV bruto; os exemplos são funções matemáticas.

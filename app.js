@@ -1,16 +1,19 @@
-import {nav,sections,bom,phases,questions,references,slides} from './content.js';
+import {nav,sections,bom,phases,questions,references,slides} from './content.js?v=3.0';
 import {simulate,parseCSV,processSpectrum,csvFor} from './spectra.js';
-import {ModelViewer} from './viewer.js?v=2.1';
-import {enhanceContent} from './experience-content.js';
-import {initExperience} from './experience.js?v=2.1';
+import {ModelViewer} from './viewer.js?v=3.0';
+import {enhanceContent} from './experience-content.js?v=3.0';
+import {initExperience} from './experience.js?v=3.0';
+import {focusResearch} from './research-content.js?v=3.0';
+import {initResearch} from './research.js?v=3.0';
 enhanceContent(nav,sections);
+focusResearch(nav,sections,questions,slides,references);
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const iconPaths={home:'M3 10 12 3l9 7M5 9v11h14V9M9 20v-7h6v7',file:'M6 3h9l4 4v14H6zM14 3v5h5M9 12h7M9 16h7',waves:'M2 8c4-7 5 7 9 0s5 7 11 0M2 15c4-7 5 7 9 0s5 7 11 0',chart:'M4 3v17h17M7 15l4-5 4 3 5-7',cube:'m12 2 9 5v10l-9 5-9-5V7zM3 7l9 5 9-5M12 12v10',chip:'M7 7h10v10H7zM9 1v6M15 1v6M9 17v6M15 17v6M1 9h6M1 15h6M17 9h6M17 15h6',code:'m8 6-6 6 6 6M16 6l6 6-6 6M14 3l-4 18',calendar:'M4 5h16v16H4zM8 2v6M16 2v6M4 10h16M8 14h2M14 14h2',book:'M12 5C9 2 5 2 2 3v17c3-1 7-1 10 2 3-3 7-3 10-2V3c-3-1-7-1-10 2zM12 5v17',link:'m10 8 3-3a4 4 0 0 1 6 6l-3 3M14 16l-3 3a4 4 0 0 1-6-6l3-3M8 16l8-8'};
 const navHTML=nav.map(([id,title,icon])=>`<a href="#${id}" data-route="${id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${iconPaths[icon]}"/></svg><span>${title}</span></a>`).join('');
 const split=navHTML.indexOf('<a href="#proposta"');
 $('#navigation').innerHTML=navHTML.slice(0,split)+'<details class="nav-more"><summary>Projeto e arquivos</summary>'+navHTML.slice(split)+'</details>';
 $('#main').innerHTML=Object.entries(sections).map(([id,html])=>`<section class="view" id="view-${id}" data-view="${id}" hidden>${html}</section>`).join('');
-$$('a[href]').filter(a=>/\.(stl|pdf)$/.test(a.getAttribute('href'))).forEach(a=>a.href+='?v=2.1');
+$$('a[href]').filter(a=>/\.(stl|pdf)$/.test(a.getAttribute('href'))).forEach(a=>a.href+='?v=3.0');
 let hero,model,modelLoaded=false;
 function ensureModel(){if(!model)model=new ModelViewer($('#main3d'));return model;}
 function route(){let id=location.hash.slice(1);if(!sections[id])id='inicio';$$('.view').forEach(el=>el.hidden=el.dataset.view!==id);$$('#navigation a').forEach(el=>{const active=el.dataset.route===id;el.classList.toggle('active',active);if(active)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current');});const activeLink=$('#navigation a.active');if(activeLink?.closest('details'))activeLink.closest('details').open=true;$('#breadcrumb-current').textContent=nav.find(n=>n[0]===id)[1];document.title=`${nav.find(n=>n[0]===id)[1]} · OdontoRaman Lab`;closeMenu();window.scrollTo(0,0);if(id==='inicio'&&hero)hero.draw();if(id==='laboratorio')updateLab();if(id==='modelos'){if(!modelLoaded){modelLoaded=true;ensureModel();model.load($('#model-select').value).catch(e=>toast(e.message));}else model.draw();} }
@@ -58,10 +61,6 @@ const mini=simulate({noise:0,fluorescence:0});$('#mini-spectrum').innerHTML=`<sv
 $('#bom-table tbody').innerHTML=bom.map((item,i)=>`<tr><td>${item.url?`<a class="bom-name" href="${item.url}" target="_blank" rel="noopener">${item.name} ›</a>`:`<b class="bom-name">${item.name}</b>`}<span class="bom-note">${item.note}</span></td><td><input type="number" class="bom-qty" min="0" max="100" step="1" value="${item.qty}" data-bom="${i}" data-field="qty" aria-label="Quantidade de ${item.name}"></td><td><input type="number" class="bom-price" min="0" max="1000000" step=".01" value="${item.price}" data-bom="${i}" data-field="price" aria-label="Valor unitário de ${item.name}"></td><td id="subtotal-${i}"></td></tr>`).join('');
 function updateBudget(){let total=0;for(let i=0;i<bom.length;i++){const inputs=$$(`[data-bom="${i}"]`);if(inputs.some(e=>!e.checkValidity()||e.value==='')){$('#bom-total').textContent='Revisar valores';$('#bom-reserve').textContent='—';$('#bom-export').disabled=true;return;}const qty=+inputs[0].value,price=+inputs[1].value;const amount=Math.round(qty*price*100)/100;$('#subtotal-'+i).textContent='R$ '+number(amount);total+=amount;}$('#bom-total').textContent='R$ '+number(total);$('#bom-reserve').textContent='R$ '+number(total*1.2);$('#bom-export').disabled=false;}
 $$('[data-bom]').forEach(el=>el.oninput=updateBudget);updateBudget();$('#bom-export').onclick=()=>{const rows=bom.map((b,i)=>{const els=$$(`[data-bom="${i}"]`);return [b.name,+els[0].value,+els[1].value,(+els[0].value*+els[1].value).toFixed(2),b.url||'estimativa própria'].join(';');});download('orcamento_bancada.csv','material;quantidade;unitario_brl;subtotal_brl;fonte\n'+rows.join('\n'),'text/csv;charset=utf-8');};
-let done=[];try{const saved=JSON.parse(localStorage.getItem('odonto-raman-progress')||'[]');if(Array.isArray(saved))done=saved;}catch{}
-$('#timeline').innerHTML=phases.map(([week,title,team,detail],i)=>`<article class="phase ${done.includes(i)?'completed':''}" id="phase-${i}"><div class="phase-week">${week}<span>SEMANAS</span></div><div><h3>${title}</h3><span class="tag">${team}</span><p>${detail}</p></div><label><input type="checkbox" data-phase="${i}" ${done.includes(i)?'checked':''} aria-label="Concluir etapa ${i+1}: ${title}"></label></article>`).join('');
-function progress(){const checked=$$('[data-phase]:checked');$('#progress-text').textContent=`${checked.length} de 8 etapas concluídas`;$('#plan-progress').value=checked.length;$$('[data-phase]').forEach(e=>$('#phase-'+e.dataset.phase).classList.toggle('completed',e.checked));try{localStorage.setItem('odonto-raman-progress',JSON.stringify(checked.map(e=>+e.dataset.phase)));}catch{}}
-$$('[data-phase]').forEach(e=>e.onchange=progress);progress();
 $('#quiz').innerHTML=questions.map(([q,answers],i)=>`<fieldset class="quiz-card"><legend>${i+1}. ${q}</legend>${answers.map((a,j)=>`<label><input type="radio" name="q${i}" value="${j}">${a}</label>`).join('')}<div class="quiz-feedback" id="feedback-${i}" hidden></div></fieldset>`).join('');
 $('#check-quiz').onclick=()=>{let count=0;questions.forEach((q,i)=>{const choice=$(`input[name="q${i}"]:checked`),good=choice&&+choice.value===q[2];if(good)count++;const feedback=$('#feedback-'+i);feedback.hidden=false;feedback.classList.toggle('wrong',!good);feedback.textContent=(good?'Correto. ':choice?'Vamos revisar. ':'Escolha uma alternativa. ')+q[3];});$('#quiz-result').textContent=`${count} de ${questions.length} respostas corretas.`;};
 $('#reference-list').innerHTML=references.map(([title,type,url,note],i)=>`<article class="reference"><span class="reference-index">${String(i+1).padStart(2,'0')}</span><div><small>${type}</small><h3><a href="${url}" target="_blank" rel="noopener">${title} ›</a></h3><p>${note}</p></div></article>`).join('');
@@ -72,8 +71,10 @@ async function disconnect(){reading=false;if(reader){try{await reader.cancel();}
 if(!('serial'in navigator)){$('#serial-connect').disabled=true;$('#serial-state').textContent='Web Serial indisponível neste navegador. Use Chrome/Edge compatível no computador ou o monitor serial da Arduino IDE.';}
 $('#serial-connect').onclick=async()=>{try{port=await navigator.serial.requestPort();await port.open({baudRate:115200});reading=true;$('#serial-connect').disabled=true;$('#serial-disconnect').disabled=false;$('#serial-state').textContent='Conectado · 115200 baud · somente eventos da bancada LED';const decoder=new TextDecoder();let buffer='';reader=port.readable.getReader();try{while(reading){const {value,done}=await reader.read();if(done)break;buffer+=decoder.decode(value,{stream:true});if(buffer.length>20000)buffer=buffer.slice(-10000);let i;while((i=buffer.indexOf('\n'))>=0){const line=buffer.slice(0,i).trim();buffer=buffer.slice(i+1);try{const event=JSON.parse(line);if(event.type==='bancada_led'){serialEvents.push({received_at:new Date().toISOString(),...event});serialEvents=serialEvents.slice(-1000);$('#serial-log').textContent=serialEvents.slice(-12).map(e=>`${e.received_at.slice(11,19)} · ${e.event} · ${e.state} · tampa ${e.lid_closed?'fechada':'aberta'}`).join('\n');}}catch{}}}}finally{reader.releaseLock();reader=null;}}catch(e){toast(e.name==='NotFoundError'?'Nenhuma porta selecionada.':'Não foi possível conectar: '+e.message);}finally{await disconnect();}};
 $('#serial-disconnect').onclick=disconnect;$('#serial-export').onclick=()=>{if(!serialEvents.length){toast('Ainda não há eventos para exportar.');return;}download('eventos_bancada_led.json',JSON.stringify({project:'OdontoRaman Lab',spectrometer:false,events:serialEvents},null,2),'application/json');};
-route();hero=new ModelViewer($('#hero3d'),{hero:true});hero.load().catch(e=>toast('Modelo 3D: '+e.message));
+route();hero=new ModelViewer($('#hero3d'),{hero:true});
 
 $('.skip-link').addEventListener('click',e=>{e.preventDefault();$('#main').focus();});
 
 initExperience({getModel:ensureModel,getHero:()=>hero,toast,runPreset:values=>{ $('#reset-spectrum').onclick();for(const [key,value] of Object.entries(values)){if(key==='compare')$('#compare').checked=value;else $('#'+key).value=value;}updateLab();}});
+
+initResearch(hero);
