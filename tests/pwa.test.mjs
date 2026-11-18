@@ -21,15 +21,15 @@ test('PWA instala todos os recursos locais e serve módulos/entrada offline no s
  const w=worker();await w.run('install');await w.run('activate');w.offline();
  assert(w.claimed());assert.deepEqual(w.deleted,['odonto-app-old']);
  const home=await w.get('./');assert.equal(home.status,200);assert((await home.text()).includes('manifest.webmanifest'));
- for(const asset of ['app.js?v=3.4','collection.js','implementation-data.js','implementation.css?v=3.4','dados/mucosa_sintetica_A.csv'])assert.equal((await w.get(asset)).status,200);
+ for(const asset of ['app.js?v=3.5','cec-raman.js?v=3.5','cec-raman-model.js','collection.js','implementation-data.js','implementation.css?v=3.5','dados/mucosa_sintetica_A.csv'])assert.equal((await w.get(asset)).status,200);
  assert.equal(w.network.length,0);
 });
 test('download que não foi preparado falha claramente offline e nunca recebe HTML',async()=>{
  const w=worker();await w.run('install');w.offline();const response=await w.get('docs/nunca-aberto.pdf');assert.equal(response.status,503);assert(!(await response.text()).includes('<html'));
 });
 test('documento visitado online pode ser reaberto offline com ou sem parâmetro de versão',async()=>{
- const w=worker();await w.run('install');await w.get('docs/Manual_Monografia_UNIVAP.pdf?v=3.4');w.offline();assert.equal(await (await w.get('docs/Manual_Monografia_UNIVAP.pdf')).text(),'online file');
+ const w=worker();await w.run('install');await w.get('docs/Manual_Monografia_UNIVAP.pdf?v=3.5');w.offline();assert.equal(await (await w.get('docs/Manual_Monografia_UNIVAP.pdf')).text(),'online file');
 });
 test('manifesto preserva escopo relativo e ícones reais',()=>{
- const manifest=JSON.parse(fs.readFileSync(path.join(root,'manifest.webmanifest'),'utf8'));assert.equal(manifest.scope,'./');assert.equal(manifest.start_url,'./#coleta');for(const icon of manifest.icons)assert(fs.statSync(path.join(root,icon.src)).size>100);
+ const manifest=JSON.parse(fs.readFileSync(path.join(root,'manifest.webmanifest'),'utf8'));assert.equal(manifest.scope,'./');assert.equal(manifest.start_url,'./#cec');for(const icon of manifest.icons)assert(fs.statSync(path.join(root,icon.src)).size>100);
 });
