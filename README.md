@@ -1,3 +1,13 @@
+## Atualização 3.5 · pesquisa Raman para carcinoma espinocelular bucal (CEC)
+
+O foco explícito da plataforma é a investigação de padrões espectrais Raman associados ao câncer de boca, comparando mucosa oral normal e CEC com referências histopatológicas. Nova seção **Raman · câncer bucal**, com espectros didáticos (identificados como sintéticos), importação de conjuntos CSV pseudonimizados, curvas médias por paciente, PCA descritiva, classificação exploratória por centróides com validação leave-one-patient-out, matriz e relatório JSON. Nenhuma predição é diagnóstico clínico.
+
+O estudo FT-Raman de Furuse (2006) e a separação entre a bancada de transmissão ESP32/OPT101 **não-Raman** e a instrumentação Raman real são explicitados. O protocolo completo está em [docs/Protocolo_CEC_Raman.md](docs/Protocolo_CEC_Raman.md). A PWA abre na página da investigação e preserva Administração, cronograma, INIC e documentos.
+
+**Limitações verificadas:** não foi montado/validado hardware Raman real; rótulos de CSV importado dependem de histopatologia informada pelo pesquisador; a validação por paciente é somente interna. Não usar para triagem, laudo ou decisão clínica.
+
+---
+
 ## Atualização 3.4 · Administração e criação da empresa
 
 Quarto curso com oito etapas, plano de negócio editável, custos e ponto de equilíbrio, backup JSON e exportação Markdown. O botão de metas adiciona oito compromissos sem duplicar ou substituir edições existentes. Dados ficam neste navegador. Fontes: Sebrae, REDESIM, Receita Federal e Anvisa, consultadas em 18/11/2026. A atividade prepara a empresa; não registra CNPJ nem torna o protótipo apto ao uso clínico.
