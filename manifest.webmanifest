@@ -1,22 +1,50 @@
 {
   "id": "./",
-  "name": "OdontoRaman Lab — Coleta e pesquisa",
+  "name": "OdontoRaman Lab — Raman e câncer bucal",
   "short_name": "OdontoRaman",
-  "description": "Bancada LED, registro de coletas, análise didática e escrita do TCC.",
+  "description": "TCC de espectroscopia Raman para pesquisa de carcinoma espinocelular bucal, com PWA e análise exploratória não diagnóstica.",
   "lang": "pt-BR",
-  "start_url": "./#coleta",
+  "start_url": "./#cec",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f4f6f1",
   "theme_color": "#136c58",
   "icons": [
-    {"src":"assets/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
-    {"src":"assets/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"},
-    {"src":"assets/icon-maskable.png","sizes":"512x512","type":"image/png","purpose":"maskable"}
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ],
   "shortcuts": [
-    {"name":"Nova coleta","url":"./#coleta"},
-    {"name":"Como fazer","url":"./#como-fazer"},
-    {"name":"Materiais","url":"./#materiais"}
+    {
+      "name": "Raman e câncer bucal",
+      "url": "./#cec"
+    },
+    {
+      "name": "Nova coleta",
+      "url": "./#coleta"
+    },
+    {
+      "name": "Como fazer",
+      "url": "./#como-fazer"
+    },
+    {
+      "name": "Materiais",
+      "url": "./#materiais"
+    }
   ]
 }
