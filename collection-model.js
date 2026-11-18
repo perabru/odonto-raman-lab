@@ -1,0 +1,28 @@
+import {parseCSV} from './spectra.js';
+export const ORIGINS={demonstracao:'Ficha de demonstração',sintetico:'Espectro sintético',laboratorio:'CSV de laboratório autorizado',bancada_led:'Eventos da bancada LED'};
+export const MAX_RECORDS=300;
+export const MAX_BACKUP_BYTES=24000000;
+const fail=message=>{throw Error(message);};
+function text(v,name,max,required=false){if(typeof v!=='string'||v.length>max||(required&&!v.trim()))fail(`${name}: texto inválido.`);return v;}
+function code(v,name,required=false){text(v,name,40,required);if(v&&!/^[a-zA-Z0-9_-]+$/.test(v))fail(`${name}: use letras, números, hífen ou sublinhado.`);return v;}
+function date(v,name){if(typeof v!=='string'||!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(v)||!Number.isFinite(Date.parse(v))||new Date(v).toISOString()!==v)fail(`${name}: data inválida.`);return v;}
+function num(v,name,min,max,integer=false){if(v===null)return null;if(!Number.isFinite(v)||v<min||v>max||(integer&&!Number.isInteger(v)))fail(`${name}: valor inválido.`);return v;}
+export function spectrumPayload(rawCSV,filename){text(rawCSV,'CSV',2000000,true);text(filename,'Nome do arquivo',200,true);const data=parseCSV(rawCSV);return {kind:'spectrum',filename,rawCSV,points:data.x.length,duplicates:data.duplicates,range:[data.x[0],data.x.at(-1)]};}
+export function ledPayload(events){if(!Array.isArray(events)||!events.length||events.length>1000)fail('Use de 1 a 1.000 eventos da bancada LED.');const allowedEvents=['inicializacao','status','ciclo_iniciado','ciclo_finalizado','tampa_aberta','inicio_bloqueado'],states=['pronto','executando','concluido','interrompido'];return {kind:'led',events:events.map(e=>{if(!e||e.type!=='bancada_led'||e.spectrometer!==false||!allowedEvents.includes(e.event)||!states.includes(e.state)||typeof e.lid_closed!=='boolean')fail('Evento incompatível com o firmware da bancada LED.');const uptime=num(e.uptime_ms,'Tempo do ESP32',0,4294967295,true);if(uptime===null)fail('Evento sem tempo do ESP32.');return {type:'bancada_led',event:e.event,state:e.state,lid_closed:e.lid_closed,uptime_ms:uptime,spectrometer:false,received_at:e.received_at?date(e.received_at,'Recebimento'):null};})};}
+export function validateRecord(r){
+ if(!r||typeof r!=='object'||r.version!==1)fail('Registro de coleta inválido.');
+ const result={version:1,id:code(r.id,'ID',true),createdAt:date(r.createdAt,'Criação'),measuredAt:date(r.measuredAt,'Sessão'),sampleCode:code(r.sampleCode,'Código do espécime',true),point:code(r.point,'Ponto'),replicate:code(r.replicate,'Réplica'),team:text(r.team,'Equipe',100,true),origin:r.origin,instrument:text(r.instrument,'Equipamento',120),laserNm:num(r.laserNm,'Laser (nm)',200,2000),powerMw:num(r.powerMw,'Potência (mW)',0,100000),integrationSeconds:num(r.integrationSeconds,'Integração (s)',0,86400),accumulations:num(r.accumulations,'Acumulações',1,10000000,true),notes:text(r.notes,'Observações',2000),payload:null};
+ if(!Object.hasOwn(ORIGINS,r.origin))fail('Selecione uma origem válida.');
+ if(r.payload?.kind==='spectrum')result.payload=spectrumPayload(r.payload.rawCSV,r.payload.filename);
+ else if(r.payload?.kind==='led')result.payload=ledPayload(r.payload.events);
+ else if(r.payload!==null)fail('Arquivo da coleta inválido.');
+ if(['sintetico','laboratorio'].includes(r.origin)&&result.payload?.kind!=='spectrum')fail('Esta origem exige um espectro CSV.');
+ if(r.origin==='bancada_led'&&result.payload?.kind!=='led')fail('Importe ou envie os eventos do monitor USB.');
+ if(r.origin==='demonstracao'&&result.payload!==null)fail('Para anexar um espectro ou eventos, escolha a origem correspondente.');
+ if(r.origin==='bancada_led'&&[r.laserNm,r.powerMw,r.integrationSeconds,r.accumulations].some(x=>x!==null))fail('Eventos LED não possuem parâmetros de aquisição Raman.');
+ return result;
+}
+export function validateCollectionBackup(v){if(!v||v.format!=='odonto-collection'||v.version!==1||!Array.isArray(v.records)||v.records.length>MAX_RECORDS)fail('Backup de coleta incompatível (máximo de 300 registros).');const records=v.records.map(validateRecord);if(new Set(records.map(r=>r.id)).size!==records.length)fail('Backup com IDs duplicados.');return records;}
+export function mergeCollection(current,incoming){const ids=new Map(current.map(r=>[r.id,r]));let duplicates=0,conflicts=0,added=0;for(const r of incoming){if(ids.has(r.id)){if(JSON.stringify(ids.get(r.id))===JSON.stringify(r))duplicates++;else conflicts++;}else{ids.set(r.id,r);added++;}}if(ids.size>MAX_RECORDS)fail('Limite de 300 registros. Exporte o backup para preservar o lote.');const records=[...ids.values()];if(new TextEncoder().encode(JSON.stringify(records,null,2)).length>MAX_BACKUP_BYTES)fail('Limite local de 24 MB atingido. Exporte o backup para preservar o lote.');return {records,added,duplicates,conflicts};}
+const cell=value=>{const s=String(value??'');return '"'+(/^[=+\-@\t\r]/.test(s)?"'"+s:s).replaceAll('"','""')+'"';};
+export function recordsCSV(records){const headers=['id','data_hora_iso','especime','ponto','replica','equipe','origem','equipamento','laser_nm','potencia_mw','integracao_s','acumulacoes','arquivo','pontos_espectro','eventos_led','observacoes'];return '\uFEFF'+[headers,...records.map(r=>[r.id,r.measuredAt,r.sampleCode,r.point,r.replicate,r.team,ORIGINS[r.origin],r.instrument,r.laserNm,r.powerMw,r.integrationSeconds,r.accumulations,r.payload?.filename||'',r.payload?.points??'',r.payload?.events?.length??'',r.notes])].map(row=>row.map(cell).join(';')).join('\r\n');}

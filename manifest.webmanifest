@@ -1,0 +1,22 @@
+{
+  "id": "./",
+  "name": "OdontoRaman Lab — Coleta e pesquisa",
+  "short_name": "OdontoRaman",
+  "description": "Bancada LED, registro de coletas, análise didática e escrita do TCC.",
+  "lang": "pt-BR",
+  "start_url": "./#coleta",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f6f1",
+  "theme_color": "#136c58",
+  "icons": [
+    {"src":"assets/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"assets/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"},
+    {"src":"assets/icon-maskable.png","sizes":"512x512","type":"image/png","purpose":"maskable"}
+  ],
+  "shortcuts": [
+    {"name":"Nova coleta","url":"./#coleta"},
+    {"name":"Como fazer","url":"./#como-fazer"},
+    {"name":"Materiais","url":"./#materiais"}
+  ]
+}

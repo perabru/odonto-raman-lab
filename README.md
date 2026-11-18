@@ -1,3 +1,18 @@
+## Atualização 3.2 · execução e coleta PWA
+
+- **Como fazer:** 13 etapas com materiais, instruções, evidências, links e filtro por equipe. Guia completo em Markdown e impressão pelo navegador.
+- **Materiais:** 22 itens de Eletrônica, Análises Clínicas e laboratório parceiro. Quantidades, situação, cotação unitária e total parcial editáveis; exportação CSV. Estoque da escola precisa ser conferido. Nenhum preço foi apresentado como cotação atual.
+- **Programas:** 11 ferramentas/conjuntos com finalidade, equipe, necessidade e links oficiais. O uso cotidiano da plataforma requer apenas navegador compatível; as demais instalações dependem do papel de cada equipe.
+- **PWA:** manifesto, ícones, instalação quando oferecida pelo navegador, conteúdo principal offline e atualização explícita. PDFs, DOCX e STL são armazenados ao serem acessados; fontes externas continuam online.
+- **Coleta:** IndexedDB local, fichas com códigos, CSV bruto preservado, eventos LED de USB/JSON, busca, detalhes, análise ligada ao registro, exportação CSV e backup/restauração JSON sem sobrescrever conflitos. Até 300 registros e 24 MB; backup de até 25 MB.
+- **Compatibilidade:** fichas e importação no celular/computador. Monitor USB depende de Web Serial no computador. Não foram implementadas transmissão Wi-Fi/Bluetooth do ESP32, contas ou sincronização em nuvem. Não inserir identificadores de pacientes.
+
+Antes de publicar alterações, execute `node scripts/prepare-pwa.mjs`: o script atualiza o guia, os modelos e a revisão do cache com base no conteúdo. O service worker utiliza escopo relativo para funcionar em `/odonto-raman-lab/`. Rascunhos e calendário anteriores são preservados em suas chaves de armazenamento.
+
+O firmware permanece o mesmo: controla LEDs e informa estados; não adquire espectros Raman. Nenhum ensaio físico de ESP32 ou de celular foi realizado nesta atualização.
+
+---
+
 ## Atualização 3.1
 
 O projeto continua centrado no carcinoma espinocelular da mucosa bucal e na tese de Furuse (2006). Esta atualização acrescenta:

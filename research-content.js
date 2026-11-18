@@ -1,7 +1,7 @@
 import {ftHTML} from './ft-lab.js';
-import {planningHTML} from './planning.js?v=3.1';
-import {writingSections} from './writing.js?v=3.1';
-import {mucosaLabHTML} from './mucosa-lab.js?v=3.1';
+import {planningHTML} from './planning.js?v=3.2';
+import {writingSections} from './writing.js?v=3.2';
+import {mucosaLabHTML} from './mucosa-lab.js?v=3.2';
 export const thesisURL='https://repositorio.unesp.br/server/api/core/bitstreams/15410280-fe40-4ec5-8394-4c67d27f069d/content';
 const heading=(tag,title,p)=>`<div class="page-heading"><span class="eyebrow">${tag}</span><h1>${title}</h1><p>${p}</p></div>`;
 export function focusResearch(nav,sections,questions,slides,references){

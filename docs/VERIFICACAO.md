@@ -1,3 +1,15 @@
+## Versão 3.2 · 18/11/2026
+
+- 50 testes Node e 3 testes Python aprovados; 22 rotas e seus arquivos locais conferidos sem destino ausente.
+
+- Testes de coleta: preservação do CSV bruto, origem e parâmetros ausentes; incompatibilidade entre LED e espectro; limites; datas; restauração sem sobrescrever conflitos; exportação CSV e ligação da análise ao registro.
+- Testes do service worker com rede indisponível: todos os recursos principais presentes, entrada e módulos no subdiretório, documentos visitados e resposta clara para download não preparado. Manifesto e ícones verificados.
+- Navegador: guia por equipe, lista de 22 materiais, filtros, cotação editável e exportação CSV; 11 ferramentas/conjuntos com links e preparo.
+- Coleta sintética de 501 pontos salva, recuperada após recarregar e após aplicar atualização da PWA, exportada e reimportada sem duplicar; abertura no analisador manteve origem e código.
+- Servidor de prévia desligado durante o ensaio: app reabriu pelo cache, detalhes do registro permaneceram acessíveis e uma nova ficha foi salva. Após reiniciar o servidor e recarregar, as duas fichas de teste continuaram presentes.
+- Conteúdo e arquivos de teste do navegador ficaram no ambiente de prévia; não foram publicados como dados de alunos.
+- Limites: não houve ensaio físico do ESP32, transmissão Wi-Fi/Bluetooth, aquisição Raman real ou teste em celular físico. USB depende de Web Serial compatível. A sincronização entre aparelhos é manual por backup. PDFs/Word/STL precisam ser acessados antes do uso offline.
+
 ## Versão 3.1 · 18/11/2026
 
 - 39 testes Node aprovados. Uma banda conhecida em 1450 cm⁻¹ foi recuperada pelo exemplo de transformada dentro de 2 cm⁻¹.
