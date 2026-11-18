@@ -1,5 +1,5 @@
 /* Gerado por scripts/prepare-pwa.mjs. Atualize a versão ao publicar alterações. */
-const CACHE='odonto-app-3.3.0-304860c26672';
+const CACHE='odonto-app-3.3.0-056e66942ddc';
 const CORE=[
   "./",
   "index.html",
