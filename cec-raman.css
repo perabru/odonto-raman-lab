@@ -1,0 +1,52 @@
+/* OdontoRaman 3.5 · painel de pesquisa em CEC de mucosa bucal */
+.cec-warning{margin:12px 0 20px;padding:17px 20px;border:1px solid #e4c99a;border-left:4px solid #bd8a31;border-radius:14px;background:#fff8eb;color:#785321;line-height:1.5}
+.cec-warning b{color:#704917}
+.cec-hero{display:grid;grid-template-columns:1.2fr .95fr;gap:24px;align-items:center;background:linear-gradient(126deg,#e7f4ee,#f5faf7 63%,#e5f0f6);border:1px solid #c8ded4;padding:28px 30px;border-radius:22px;margin:20px 0 24px}
+.cec-hero h2{font-size:clamp(1.45rem,3vw,2.25rem);line-height:1.15;margin:10px 0}
+.cec-hero p{line-height:1.65;max-width:640px}
+.cec-hero-equation{min-height:246px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;border:1px solid #cbded7;border-radius:20px;background:rgba(255,255,255,.7);box-shadow:0 12px 35px #154d3114}
+.cec-hero-equation span{font-size:.85rem;letter-spacing:.07em;font-weight:800;color:#105c4c;background:#e9f7f1;padding:7px 18px;border-radius:8px;min-width:155px;text-align:center}
+.cec-hero-equation i{font-style:normal;font-size:1.2rem;color:#78a89a;transform:rotate(90deg);line-height:1}
+.cec-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px;margin-bottom:23px}
+.cec-columns .card{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.cec-columns h3,.cec-final h2{margin:0;font-size:1.1rem}
+.cec-columns p{line-height:1.55}
+.cec-columns .text-link{margin-top:auto}
+.cec-lab-card{padding:24px!important;margin:22px 0}
+.cec-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.cec-card-top h2{margin:7px 0}
+.cec-card-top p{max-width:790px}
+.cec-source-pill{display:inline-block;flex-shrink:0;border-radius:999px;padding:8px 12px;background:#fff3e3;color:#94591b;font-size:.69rem;font-weight:800;letter-spacing:.08em}
+.cec-source-pill.imported{background:#e4f2ff;color:#235f83}
+.cec-action-bar{display:flex;gap:9px;flex-wrap:wrap;margin:22px 0 12px}
+.cec-upload{display:inline-flex;align-items:center;cursor:pointer}
+.cec-upload input{display:none}
+.cec-status{color:#366456;background:#eff9f4;border:1px solid #d2e9dc;border-radius:10px;padding:11px 13px;font-size:.88rem;line-height:1.6}
+.cec-status.error{background:#fff1ee;border-color:#e9c7bd;color:#8e3321}
+.cec-kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin:16px 0 26px}
+.cec-kpis>div{background:#f7faf8;border:1px solid #e4eee7;border-radius:14px;padding:14px 10px;min-width:0}
+.cec-kpis small{display:block;color:#5e766e;font-size:.73rem;margin-bottom:8px}
+.cec-kpis strong{color:#1c5949;font-size:clamp(1.04rem,2.3vw,1.58rem);font-variant-numeric:tabular-nums}
+.cec-figures{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cec-figure{border:1px solid #dde9e3;border-radius:16px;padding:17px;min-width:0}
+.cec-figure h3{margin:0 0 5px;font-size:1.02rem}
+.cec-figure p{font-size:.84rem;color:#597369;min-height:2.3em}
+.cec-chart{display:block;width:100%;max-height:330px}
+.cec-chart svg{display:block;width:100%;height:auto}
+.cec-legend{display:flex;flex-wrap:wrap;gap:15px;align-items:center;justify-content:center;color:#547268;font-size:.76rem}
+.cec-dot{display:inline-block;width:10px;height:10px;border-radius:100%;background:#118b75;margin-right:5px}
+.cec-dot.cec{background:#d17658}
+.cec-evaluation{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center;border-top:1px solid #e1e9e5;margin-top:24px;padding-top:23px}
+.cec-evaluation h3{margin:10px 0}
+.cec-evaluation p{color:#587066;line-height:1.58}
+.cec-confusion{overflow-x:auto}
+.cec-confusion table{width:100%;border-collapse:collapse;font-size:.87rem}
+.cec-confusion caption{font-size:.78rem;color:#526c62;margin-bottom:8px;text-align:left}
+.cec-confusion th,.cec-confusion td{border:1px solid #d9e7de;padding:10px;text-align:center}
+.cec-confusion th{background:#edf6f0;color:#2c5e4e}
+.cec-disclaimer{border-top:1px solid #e1e9e5;margin-top:20px;padding-top:17px;font-size:.85rem;color:#816022;line-height:1.55}
+.cec-final{margin-top:24px}
+.cec-final ol{padding-left:24px;line-height:1.65}
+.cec-final li{margin:4px 0}
+@media (max-width:1000px){.cec-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.cec-figures,.cec-evaluation{grid-template-columns:1fr}.cec-figure p{min-height:0}}
+@media (max-width:700px){.cec-hero{grid-template-columns:1fr;padding:18px}.cec-hero-equation{min-height:220px}.cec-columns{grid-template-columns:1fr}.cec-card-top{flex-direction:column}.cec-lab-card{padding:14px!important}.cec-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.cec-figure{padding:10px}.cec-action-bar .btn{font-size:.78rem;padding:9px 11px}}
