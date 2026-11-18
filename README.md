@@ -1,3 +1,20 @@
+## Atualização 3.1
+
+O projeto continua centrado no carcinoma espinocelular da mucosa bucal e na tese de Furuse (2006). Esta atualização acrescenta:
+
+- Mucosa procedural com relevo, papilas, células, fibras e vasos; vistas do corte e superior, separação e isolamento das estruturas. A vista alterada é esquemática e não representa estágio clínico.
+- Instrumento FT-Raman com braços do interferômetro de Michelson, espelho móvel e demonstração numérica de interferograma e transformada cosseno. Sinais exclusivamente sintéticos.
+- Cronograma visual editável e filtrável por equipe, preservando os backups e as metas da versão anterior.
+- Exportação dos rascunhos da monografia e do INIC em DOCX, processada no navegador. Monografia: A4, Times New Roman 12, margens 3/2 cm, sumário por campo e numeração da parte textual. INIC: A4, Arial 10 e margens da base enviada. A submissão exige revisão no modelo do evento, inclusive cabeçalho, figuras e regras da edição.
+- Tese e manual com leitura interna; downloads do manual, modelo INIC limpo e estrutura da monografia.
+- Menu principal reduzido a pesquisa, simulação, análise, planejamento e escrita. Conteúdo complementar continua em Estudos e arquivos.
+
+Os rascunhos e metas continuam locais ao navegador, sem sincronização entre alunos. Exporte backups JSON. O site não gera resultados clínicos nem classifica pacientes.
+
+Validação: 39 testes automatizados (incluindo exportação OOXML, Fourier, geometria, calendário, escrita e processamento), paridade numérica JavaScript/Python e conferência no navegador de modelos, filtros, recuperação do rascunho, download DOCX e leitor PDF. O firmware não foi alterado.
+
+---
+
 # OdontoRaman Lab
 
 Proposta de TCC para ensino médio técnico que integra **Informática, Eletrônica e Análises Clínicas** em uma plataforma educacional de FT-Raman e carcinoma espinocelular da mucosa bucal, com base na tese de Furuse (2006).

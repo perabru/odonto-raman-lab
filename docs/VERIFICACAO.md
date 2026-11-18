@@ -1,3 +1,12 @@
+## Versão 3.1 · 18/11/2026
+
+- 39 testes Node aprovados. Uma banda conhecida em 1450 cm⁻¹ foi recuperada pelo exemplo de transformada dentro de 2 cm⁻¹.
+- Arquivos DOCX de teste abertos, renderizados e inspecionados; textos, caracteres, margens e separação de seções preservados.
+- Conferência da identidade SHA-256 do manual com o arquivo enviado: idênticos.
+- Teste no navegador: navegação, animação e pausa do FT-Raman; separação da mucosa; filtro do cronograma; recuperação da escrita após recarregar; download Word; consulta interna do manual.
+- Os rascunhos e metas anteriores permanecem compatíveis. Nenhum dado de aluno foi publicado no código.
+- Limites: ilustração anatômica sem escala histológica; transformada simplificada de sinais sintéticos; rascunho Word requer revisão editorial e adequação ao cabeçalho da edição do INIC. Sem testes em dispositivos móveis físicos.
+
 # Verificação da versão 1.0
 
 Data: 17/11/2026.
